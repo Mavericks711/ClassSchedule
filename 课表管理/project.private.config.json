@@ -22,11 +22,25 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/security/security",
+          "pathName": "pages/security/security",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/password/password",
+          "pathName": "pages/password/password",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "pages/home_pre/home_pre",
           "pathName": "pages/home_pre/home_pre",
           "query": "",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "pages/edit/edit",

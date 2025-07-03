@@ -6,7 +6,9 @@
     "pages/register/register",
     "pages/schedule_date/schedule_date",
     "pages/schedule_week/schedule_week",
-    "pages/edit/edit"
+    "pages/edit/edit",
+    "pages/set_password/set_password",
+    "pages/set_security/set_security"
   ],
   "tabBar": {
     "selectedColor": "#1e8aef",

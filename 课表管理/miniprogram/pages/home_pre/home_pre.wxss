@@ -61,7 +61,7 @@
 }
 .text_4 {
   margin-right: 86.02rpx;
-  color: #000000;
+  color: #a6a6a6;
 }
 .equal-division-item {
   flex: 1 1 0;
