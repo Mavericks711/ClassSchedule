@@ -1,0 +1,119 @@
+.mt-13 {
+  margin-top: 26rpx;
+}
+.mt-331 {
+  margin-top: 662rpx;
+}
+.page {
+  padding-top: 164rpx;
+  background-color: #ffffff;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+.group {
+  padding: 0 42rpx;
+}
+.image {
+  width: 136rpx;
+  height: 136rpx;
+}
+.font {
+  font-size: 34rpx;
+  font-family: SourceHanSansCN;
+  line-height: 31.62rpx;
+  color: #000000;
+}
+.text {
+  line-height: 31.34rpx;
+}
+.text_2 {
+  color: #000000;
+  font-size: 28rpx;
+  font-family: SourceHanSansCN;
+  line-height: 28.7rpx;
+}
+.group_2 {
+  margin-top: 68rpx;
+}
+.text_3 {
+  line-height: 31.44rpx;
+}
+.text_4 {
+  margin-left: 40rpx;
+  line-height: 31.24rpx;
+}
+.image_2 {
+  margin-left: 12rpx;
+  width: 88rpx;
+  height: 44rpx;
+}
+.text_5 {
+  margin-left: 36rpx;
+  line-height: 31.52rpx;
+}
+.text_6 {
+  margin-top: 64rpx;
+  line-height: 31.76rpx;
+}
+.text_7 {
+  margin-top: 72rpx;
+}
+.text_8 {
+  margin-top: 72rpx;
+}
+.text-wrapper {
+  margin: 60rpx 28rpx 0 8rpx;
+  padding: 32rpx 0;
+  border-radius: 50rpx;
+  border-left: solid 2rpx #1e8aef;
+  border-right: solid 2rpx #1e8aef;
+  border-top: solid 2rpx #1e8aef;
+  border-bottom: solid 2rpx #1e8aef;
+}
+.text_9 {
+  color: #1e8aef;
+  line-height: 31.32rpx;
+  letter-spacing: 10rpx;
+}
+.equal-division {
+  align-self: flex-start;
+}
+.equal-division-item {
+  flex: 1 1 295.5rpx;
+}
+.section {
+  background-color: #ffffff;
+  overflow: hidden;
+  height: 70rpx;
+}
+.image_3 {
+  margin-right: 84rpx;
+  width: 50rpx;
+  height: 50rpx;
+}
+.font_2 {
+  font-size: 22rpx;
+  font-family: AlibabaPuHuiTi;
+  line-height: 19.36rpx;
+}
+.text_10 {
+  margin-right: 88rpx;
+  color: #000000;
+}
+.group_3 {
+  padding: 6rpx 0 12rpx;
+}
+.image_4 {
+  width: 54rpx;
+  height: 54rpx;
+}
+.text_11 {
+  color: #1e8aef;
+  line-height: 20.12rpx;
+}
+.reminder-switch {
+  /* 调整开关大小，可根据需要缩放 */
+  transform: scale(0.8); 
+}

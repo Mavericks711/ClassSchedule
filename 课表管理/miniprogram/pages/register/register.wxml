@@ -1,0 +1,54 @@
+<view class="flex-col page">
+  <view class="flex-col group">
+    <view class="flex-row items-baseline self-stretch group_2">
+      <navigator url="/pages/login/login" class="login-animation">
+        <view class="text-container">
+          <text class="font text_2">登录</text>
+        </view>
+      </navigator>
+      <text class="text ml-12">注册</text>
+    </view>
+    <view class="self-start section"></view>
+  </view>
+  <view class="flex-col group_3">
+    <input 
+      class="self-start font_2 text_3" 
+      placeholder="请输入邮箱" 
+      bindinput="handleEmailInput"
+      value="{{email}}"
+      placeholder-style="color: #cccccc;"
+      style="color: #000000;"
+    />
+    <view class="self-stretch divider mt-16"></view>
+    <input 
+      class="self-start font_2 text_4 mt-16" 
+      placeholder="请输入密码" 
+      password="true" 
+      bindinput="handlePasswordInput"
+      value="{{password}}"
+      placeholder-style="color: #cccccc;"
+      style="color: #000000;"
+    />
+    <view class="self-stretch divider mt-16"></view>
+    <text class="self-end text_5 mt-16">    </text>
+    <button bindtap="register" class="flex-col justify-start items-center self-stretch text-wrapper mt-16">
+      <text class="font text_6">注册</text>
+    </button>
+  </view>
+  <view class="flex-row items-center equal-division">
+    <view class="flex-col items-end section_2">
+      <image
+        class="shrink-0 image"
+        src="https://ide.code.fun/api/image?token=686334ec4ae84d001233d4e5&name=6196d35e6ed57ba1305b69a3b247c248.png"
+      />
+      <text class="font_3 text_7">课表</text>
+    </view>
+    <view class="flex-col items-end equal-division-item group_4">
+      <image
+        class="shrink-0 image_2"
+        src="https://ide.code.fun/api/image?token=686334ec4ae84d001233d4e5&name=46bf04c30411e8435fecc89d8b5a71ba.png"
+      />
+      <text class="font_3 text_8">我的</text>
+    </view>
+  </view>
+</view>

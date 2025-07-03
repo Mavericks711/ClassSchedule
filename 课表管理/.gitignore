@@ -1,0 +1,26 @@
+# 微信小程序开发相关忽略
+
+# 编译生成的文件（miniprogram 目录下的编译产物，若有）
+miniprogram/dist/
+miniprogram/npm/
+
+# 临时文件、缓存等
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 云函数相关（若云函数依赖安装目录不想上传）
+cloudfunctions/**/node_modules/
+cloudfunctions/**/package-lock.json
+cloudfunctions/**/yarn.lock
+
+# 环境配置（若有包含敏感信息的环境配置文件）
+envList.js
+
+# 项目编译过程中可能生成的其他临时文件
+*.log
+*.tmp
+
+# 微信开发者工具生成的配置（如自动保存的一些状态，按需调整）
+miniprogram/.mp

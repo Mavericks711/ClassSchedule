@@ -1,0 +1,176 @@
+.ml-29 {
+  margin-left: 58rpx;
+}
+.mt-170 {
+  margin-top: 335rpx;
+}
+.page {
+  padding-top: 117.14rpx;
+  background-color: #ffffff;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+.group {
+  padding: 0 17.82rpx;
+}
+.group_1 {
+  padding: 0 17.46rpx;
+}
+.group_2 {
+  padding-top: 5.54rpx;
+  width: 225.42rpx;
+}
+.text {
+  color: #000000;
+  font-size: 38rpx;
+  font-family: HarmonyOSSansSC;
+  line-height: 30rpx;
+}
+.font {
+  font-size: 26rpx;
+  font-family: HarmonyOSSansSC;
+  line-height: 30rpx;
+  color: #000000;
+}
+.text_4 {
+  margin-top: 6.02rpx;
+}
+.pos {
+  position: absolute;
+  right: 12rpx;
+  top: 0;
+}
+.font_2 {
+  font-size: 36rpx;
+  font-family: AlibabaPuHuiTi;
+  letter-spacing: 11.82rpx;
+  line-height: 30rpx;
+}
+.text_2 {
+  color: #1e8aef;
+  line-height: 29.6rpx;
+}
+.text_3 {
+  color: #000000;
+  line-height: 30.82rpx;
+}
+.image {
+  width: 48rpx;
+  height: 48rpx;
+}
+.group_3 {
+  margin-top: 30.9rpx;
+}
+.font_3 {
+  font-size: 20rpx;
+  font-family: SourceHanSansCN;
+  line-height: 24rpx;
+  color: #000000;
+}
+.text_5 {
+  margin-left: 24.4rpx;
+}
+.group_4 {
+  margin-top: 19.1rpx;
+}
+.text_6 {
+  margin-left: 23.42rpx;
+}
+.group_5 {
+  margin-top: 19.08rpx;
+}
+.text_7 {
+  margin-left: 23.22rpx;
+}
+.group_6 {
+  margin-top: 19.32rpx;
+}
+.text_8 {
+  margin-left: 22.62rpx;
+}
+.group_7 {
+  margin-top: 20.22rpx;
+}
+.text_9 {
+  margin-left: 23.18rpx;
+}
+.group_8 {
+  margin-top: 18.82rpx;
+}
+.text_10 {
+  margin-left: 23.76rpx;
+}
+.group_9 {
+  margin-top: 19.36rpx;
+}
+.text_11 {
+  margin-left: 23.6rpx;
+}
+.group_10 {
+  margin-top: 19.12rpx;
+}
+.text_12 {
+  margin-left: 23.54rpx;
+}
+.group_11 {
+  margin-top: 18.52rpx;
+}
+.text_13 {
+  margin-left: 23.5rpx;
+}
+.group_12 {
+  margin-top: 19.08rpx;
+}
+.text_14 {
+  margin-left: 17.84rpx;
+}
+.group_13 {
+  margin-top: 19.06rpx;
+}
+.text_15 {
+  margin-left: 17.84rpx;
+}
+.equal-division-item_2 {
+  margin-top: 4rpx;
+}
+.section {
+  padding-bottom: 10.64rpx;
+  background-color: #ffffff;
+  overflow: hidden;
+  width: 295.5rpx;
+  height: 78rpx;
+}
+.image_2 {
+  margin-right: 83.5rpx;
+  width: 50rpx;
+  height: 50rpx;
+}
+.font_4 {
+  font-size: 20rpx;
+  font-family: AlibabaPuHuiTi;
+  line-height: 19.36rpx;
+}
+.text_16 {
+  margin-right: 86.02rpx;
+  color: #1e8aef;
+  font-size: 22rpx;
+}
+.equal-division-item {
+  flex: 1 1 0;
+}
+.group_14 {
+  padding-bottom: 11.02rpx;
+}
+.image_3 {
+  margin-right: 159rpx;
+  width: 54rpx;
+  height: 54rpx;
+}
+.text_17 {
+  margin-right: 161.42rpx;
+  color: #000000;
+  font-size: 22rpx;
+  line-height: 20.12rpx;
+}

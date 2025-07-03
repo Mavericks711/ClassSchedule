@@ -1,0 +1,169 @@
+.page {
+  padding-top: 328.6rpx;
+  background-color: #ffffff;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+.group {
+  padding: 0 97.58rpx;
+}
+.group_2 {
+  padding-bottom: 9.46rpx;
+}
+.font {
+  font-size: 34rpx;
+  font-family: SourceHanSansCN;
+  line-height: 31.92rpx;
+}
+.text_2 {
+  color: #a6a6a6;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+.text {
+  color: #000000;
+  font-size: 44rpx;
+  font-family: SourceHanSansCN;
+  font-weight: 700;
+  line-height: 41.94rpx;
+  letter-spacing: 4rpx;
+}
+.section {
+  margin-left: 138.42rpx;
+  background-color: #1e8aef;
+  border-radius: 50%;
+  width: 10rpx;
+  height: 10rpx;
+}
+.group_3 {
+  margin-top: 88.94rpx;
+  padding-left: 61rpx;
+  padding-right: 59rpx;
+}
+.font_2 {
+  font-size: 32rpx;
+  font-family: SourceHanSansCN;
+  line-height: 29.72rpx;
+  color: #cccccc;
+}
+.text_3 {
+  margin-left: 44.34rpx;
+  line-height: 29.56rpx;
+}
+.divider {
+  background-color: #cccccc;
+  height: 2rpx;
+}
+.text_4 {
+  margin-left: 44.34rpx;
+}
+.text_5 {
+  margin-right: 9.92rpx;
+  color: #1e8aef;
+  font-size: 24rpx;
+  font-family: SourceHanSansCN;
+  line-height: 22.28rpx;
+}
+.text-wrapper {
+  padding: 33.12rpx 0 29.26rpx;
+  border-radius: 50rpx;
+  border: solid 2rpx #1e8aef;
+}
+.text_6 {
+  color: #1e8aef;
+  line-height: 31.62rpx;
+  letter-spacing: 10rpx;
+}
+.equal-division {
+  margin-top: 707rpx;
+}
+.section_2 {
+  padding-bottom: 2.64rpx;
+  background-color: #ffffff;
+  overflow: hidden;
+  width: 295.5rpx;
+  height: 70rpx;
+}
+.image {
+  margin-right: 83.5rpx;
+  width: 50rpx;
+  height: 50rpx;
+}
+.font_3 {
+  font-size: 22rpx;
+  font-family: AlibabaPuHuiTi;
+  line-height: 20.12rpx;
+}
+.text_7 {
+  margin-right: 86.02rpx;
+  color: #000000;
+  line-height: 19.36rpx;
+}
+.equal-division-item {
+  flex: 1 1 0;
+}
+.group_4 {
+  padding: 6rpx 0 13.02rpx;
+}
+.image_2 {
+  margin-right: 159rpx;
+  width: 54rpx;
+  height: 54rpx;
+}
+.text_8 {
+  margin-right: 161.42rpx;
+  color: #1e8aef;
+}
+/* 基础样式：移除navigator默认点击效果 */
+navigator {
+  display: inline;
+}
+
+navigator::after {
+  display: none;
+}
+
+/* 登录文字原始样式 */
+.text_2 {
+  color: #a6a6a6; /* 浅灰色文字 */
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+
+/* 登录文字点击动画 */
+.login-animation {
+  transition: all 0.3s ease; /* 过渡动画 */
+}
+
+.login-animation:active {
+  transform: scale(1.5); /* 放大% */
+  color: #000000; /* 变为黑色 */
+}
+.page button.text-wrapper {
+  /* 清除 button 默认背景、边框等 */
+  background: transparent;
+  padding: 0;
+  margin: 1;
+  border: none;
+  /* 继承原 view 的样式逻辑 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  align-self: stretch;
+  margin-top: 32rpx; 
+  padding: 33.12rpx 0 29.26rpx;
+  border-radius: 50rpx;
+  border: solid 2rpx #1e8aef;
+  width: 100%;
+}
+/* 处理按钮点击时的默认高亮（按需，若想完全一致可加） */
+.page button.text-wrapper::after {
+  display: none;
+}
+button.text-wrapper:active {
+  background-color: #f0f0f0; 
+  /* 可同时调整其他样式，比如边框颜色等 */
+}

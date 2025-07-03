@@ -1,0 +1,81 @@
+.mt-544 {
+  margin-top: 1084rpx;
+}
+.page {
+  padding-top: 164rpx;
+  background-color: #ffffff;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+.group {
+  padding: 0 42rpx;
+}
+.image {
+  width: 136rpx;
+  height: 136rpx;
+}
+.text {
+  color: #000000;
+  font-size: 34rpx;
+  font-family: SourceHanSansCN;
+  line-height: 31.34rpx;
+}
+.text_2 {
+  color: #000000;
+  font-size: 28rpx;
+  font-family: SourceHanSansCN;
+  line-height: 25.06rpx;
+}
+.text-wrapper {
+  margin-left: 7rpx;
+  margin-right: 29rpx;
+  padding: 33.12rpx 0 26.1rpx;
+  border-radius: 50rpx;
+  border: solid 2rpx #1e8aef;
+}
+.text_3 {
+  color: #1e8aef;
+  font-size: 34rpx;
+  font-family: SourceHanSansCN;
+  line-height: 34.78rpx;
+  letter-spacing: 10rpx;
+}
+.section {
+  padding-bottom: 2.64rpx;
+  background-color: #ffffff;
+  overflow: hidden;
+  width: 295.5rpx;
+  height: 70rpx;
+}
+.image_2 {
+  margin-right: 83.5rpx;
+  width: 50rpx;
+  height: 50rpx;
+}
+.font {
+  font-size: 22rpx;
+  font-family: AlibabaPuHuiTi;
+  line-height: 19.36rpx;
+}
+.text_4 {
+  margin-right: 86.02rpx;
+  color: #000000;
+}
+.equal-division-item {
+  flex: 1 1 0;
+}
+.group_2 {
+  padding: 6rpx 0 13.02rpx;
+}
+.image_3 {
+  margin-right: 159rpx;
+  width: 54rpx;
+  height: 54rpx;
+}
+.text_5 {
+  margin-right: 161.42rpx;
+  color: #1e8aef;
+  line-height: 20.12rpx;
+}

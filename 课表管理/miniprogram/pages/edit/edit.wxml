@@ -1,0 +1,84 @@
+<view class="flex-col page">
+  <view class="flex-col self-stretch">
+    <view class="flex-col group">
+      <view class="flex-row items-center">
+        <image
+          class="image"
+          src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=47afec6c12d591567e8029b300029808.png"
+        />
+        <text class="text">添加课程</text>
+        <text class="font text_2">保存</text>
+      </view>
+      <view class="flex-col group_2 mt-41">
+        <view class="flex-row items-center">
+          <image
+            class="image"
+            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=7be7a024eab71968a110c8cb218633ea.png"
+          />
+          <text class="font text_3 ml-10">课程信息</text>
+        </view>
+        <view class="flex-row items-center mt-19">
+          <image
+            class="image"
+            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=25fcd72fc60f5e53ffd1706794d4da9b.png"
+          />
+          <text class="font text_4 ml-10">点此更改文字颜色</text>
+        </view>
+        <view class="flex-row items-center mt-19">
+          <image
+            class="image"
+            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=a1385221803b976b7d40b2e9f0e04b0e.png"
+          />
+          <text class="font text_5 ml-11">点此更改方块颜色</text>
+        </view>
+      </view>
+    </view>
+    <view class="flex-col group_3">
+      <view class="flex-col group_1">
+        <view class="flex-row justify-between items-center self-stretch group_8">
+          <text class="text_6">时间段</text>
+          <image
+            class="image"
+            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=36c61d69a8fa847d161dd9f29d7f952d.png"
+          />
+        </view>
+        <view class="flex-row items-center self-start group_4 mt-6">
+          <image
+            class="shrink-0 image"
+            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=920c143bdd860b66c941fb54048e0615.png"
+          />
+          <text class="flex-1 font_2 ml-10">第1 - 16周</text>
+        </view>
+      </view>
+      <view class="flex-col mt-21">
+        <view class="flex-row items-center self-start group_5">
+          <image
+            class="shrink-0 image_2"
+            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=1b06c422d5e9ac7677befa7203569fef.png"
+          />
+          <text class="flex-1 font_2 ml-12">周一 第1 - 2节</text>
+        </view>
+        <view class="flex-row items-center self-stretch mt-19">
+          <image
+            class="image"
+            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=8c45db2c905c064790dfa494eb6ad2bc.png"
+          />
+          <text class="font ml-11">授课老师（可不填）</text>
+        </view>
+        <view class="flex-row items-center self-stretch mt-19">
+          <image
+            class="image_3"
+            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=cb3fd1b963fc61bc0d5996a55423a9ac.png"
+          />
+          <text class="font ml-7">上课地点（可不填）</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="flex-col justify-start items-center self-end image-wrapper mt-255">
+    <image
+      class="shrink-0 image_4"
+      src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=00a53b0c841078efc0624c2640da72f2.png"
+    />
+  </view>
+</view>

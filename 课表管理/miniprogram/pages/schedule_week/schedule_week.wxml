@@ -1,0 +1,100 @@
+<view class="flex-col page">
+  <view class="flex-col self-stretch group">
+    <view class="flex-col">
+      <view class="flex-row items-center group">
+        <view class="flex-col relative group_2">
+          <text class="text_2">2025/04/11</text>
+          <text class="font text_5">第8周 周五</text>
+          <text class="font text pos"></text>
+        </view>
+        <view class="flex-row items-center ml-29">
+          <navigator url="/pages/schedule_date/schedule_date" open-type="navigate"><text class="font_2 text_3">日</text></navigator>
+          <text class="ml-12 font_2 text_4">周</text>
+          <image
+            class="ml-12 shrink-0 image"
+            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=a12c7b7d5d8f6124a1bb3e0cb0a724d9.png"
+          />
+        </view>
+      </view>
+      <view class="mt-16 flex-col group_3">
+        <view class="flex-row justify-between">
+          <view class="flex-row items-center self-stretch">
+            <text class="font_3">04</text>
+            <text class="font_4 ml-25">一</text>
+          </view>
+          <text class="self-center font_4">二</text>
+          <text class="self-center font_4">三</text>
+          <text class="self-center font_4">四</text>
+          <text class="self-center font_5">五</text>
+          <text class="self-center font_4">六</text>
+          <text class="self-center font_4 text_6">日</text>
+        </view>
+        <view class="flex-row relative group_4">
+          <text class="font_3">月</text>
+          <text class="font_4 text_7">04/7</text>
+          <text class="font_4 text_8">04/8</text>
+          <text class="font_4 text_9">04/9</text>
+          <text class="font_4 text_10">04/10</text>
+          <text class="font_5 text_11">04/11</text>
+          <text class="font_4 text_12">04/12</text>
+          <text class="font_4 text_13">04/13</text>
+        </view>
+      </view>
+      <view class="mt-16 flex-col items-start">
+        <text class="font_6 text_14">1</text>
+        <text class="font_6">08:00</text>
+        <text class="font_6">08:45</text>
+      </view>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_15">2</text>
+      <text class="font_6">08:55</text>
+      <text class="font_6">09:40</text>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_16">3</text>
+      <text class="font_6">10:10</text>
+      <text class="font_6">10:55</text>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_17">４</text>
+      <text class="font_6">11:05</text>
+      <text class="font_6">11:50</text>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_18">5</text>
+      <text class="font_6">14:30</text>
+      <text class="font_6">15:15</text>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_19">6</text>
+      <text class="font_6">15:25</text>
+      <text class="font_6">16:10</text>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_20">7</text>
+      <text class="font_6">16:40</text>
+      <text class="font_6">17:25</text>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_21">8</text>
+      <text class="font_6">17:35</text>
+      <text class="font_6">18:20</text>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_22">9</text>
+      <text class="font_6">19:10</text>
+      <text class="font_6">19:55</text>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_23">10</text>
+      <text class="font_6">20:05</text>
+      <text class="font_6">20:50</text>
+    </view>
+    <view class="flex-col items-start mt-27">
+      <text class="font_6 text_23">11</text>
+      <text class="font_6">21:00</text>
+      <text class="font_6">21:45</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,33 @@
+<view class="flex-col page">
+  <view class="flex-col group">
+    <view class="flex-row items-center">
+      <image
+        class="image"
+        src="https://ide.code.fun/api/image?token=686334ec4ae84d001233d4e5&name=efc3dc46c6e01a7a3ede3ffbdf91e62e.png"
+      />
+      <view class="flex-col items-start ml-16">
+        <text class="text">请登录</text>
+        <text class="text_2 mt-14">@.com</text>
+      </view>
+    </view>
+    <navigator url="/pages/login/login" class="flex-col justify-start items-center text-wrapper mt-24">
+      <text class="text_3">注册/登录</text>
+    </navigator>
+  </view>
+  <view class="flex-row items-center mt-544">
+    <view class="flex-col items-end section">
+      <image
+        class="shrink-0 image_2"
+        src="https://ide.code.fun/api/image?token=686334ec4ae84d001233d4e5&name=6196d35e6ed57ba1305b69a3b247c248.png"
+      />
+      <text class="font text_4">课表</text>
+    </view>
+    <view class="flex-col items-end equal-division-item group_2">
+      <image
+        class="shrink-0 image_3"
+        src="https://ide.code.fun/api/image?token=686334ec4ae84d001233d4e5&name=b428399de64bea7cc88907dc00d251f2.png"
+      />
+      <text class="font text_5">我的</text>
+    </view>
+  </view>
+</view>
