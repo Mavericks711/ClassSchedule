@@ -95,9 +95,10 @@
 }
 .text_7 {
   margin-right: 86.02rpx;
-  color: #000000;
+  color: #a6a6a6;
   line-height: 19.36rpx;
 }
+
 .equal-division-item {
   flex: 1 1 0;
 }

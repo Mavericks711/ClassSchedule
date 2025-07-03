@@ -40,7 +40,7 @@
     <view class="flex-col items-end section_2">
       <image
         class="shrink-0 image"
-        src="https://ide.code.fun/api/image?token=686334ec4ae84d001233d4e5&name=6196d35e6ed57ba1305b69a3b247c248.png"
+        src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/68629502d54496f19f748f14/6862953b2b2a8200119c2aa2/17515159668249891185.png"
       />
       <text class="font_2 text_7">课表</text>
     </view>
