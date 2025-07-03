@@ -104,7 +104,7 @@ Page({
         // 使用 wx.redirectTo 可以关闭当前注册页，用户无法返回
         setTimeout(() => {
           wx.redirectTo({
-            url: '/pages/schedule_date/schedule_date'
+            url: '/pages/login/login'
           });
         }, 1500); // 延迟 1.5 秒，让用户能看到成功提示
 
