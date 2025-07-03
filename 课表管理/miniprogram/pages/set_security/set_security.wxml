@@ -1,2 +1,37 @@
-<!--pages/set_security/set_security.wxml-->
-<text>pages/set_security/set_security.wxml</text>
+<view class="flex-col page">
+  <view class="flex-col">
+    <view class="flex-row items-center self-stretch group">
+      <navigator url="/pages/home/home" open-type="navigateBack">
+      <image
+        class="image"
+        src="https://ide.code.fun/api/image?token=6866034c4ae84d00123406e0&name=47afec6c12d591567e8029b300029808.png"
+      />
+      </navigator>
+      <text class="text ml-11">密保设置</text>
+    </view>
+    <view class="self-start section"></view>
+  </view>
+  <view class="mt-46 flex-col group_2">
+    <input 
+      class="self-start font text_2" 
+      placeholder="请输入密保问题" 
+      bindinput="onQuestionInput"
+      value="{{email}}"
+      placeholder-style="color: #cccccc;"
+      style="color: #000000;"
+    />
+    <view class="mt-16 self-stretch divider"></view>
+    <input 
+      class="mt-16 self-start font text_3" 
+      placeholder="请输入密保答案" 
+      bindinput="onAnswerInput"
+      input-type="digit"
+      maxlength="11"
+      value="{{securityAnswer}}"
+      placeholder-style="color: #cccccc;"
+      style="color: #000000;"
+    />
+    <view class="mt-16 self-stretch divider"></view>
+  </view>
+  <button bindtap="confirm" class="mt-46 flex-col justify-start items-center text-wrapper"><text class="font text_4">确认</text></button>
+</view>

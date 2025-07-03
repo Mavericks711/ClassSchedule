@@ -1,1 +1,92 @@
-/* pages/set_security/set_security.wxss */
+.ml-11 {
+  margin-left: 22rpx;
+}
+.page {
+  padding: 324rpx 32rpx 793.26rpx;
+  background-color: #ffffff;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+.group {
+  padding-bottom: 6rpx;
+}
+.image {
+  width: 48rpx;
+  height: 48rpx;
+}
+.text {
+  color: #000000;
+  font-size: 44rpx;
+  font-family: SourceHanSansCN;
+  font-weight: 700;
+  line-height: 42.02rpx;
+  letter-spacing: 4rpx;
+}
+.section {
+  margin-left: 160rpx;
+  background-color: #1e8aef;
+  border-radius: 50%;
+  width: 10rpx;
+  height: 10rpx;
+}
+.group_2 {
+  padding-left: 30rpx;
+  padding-right: 28rpx;
+}
+.font {
+  font-size: 32rpx;
+  font-family: SourceHanSansCN;
+  line-height: 29.76rpx;
+  color: #cccccc;
+}
+.text_2 {
+  margin-left: 43.34rpx;
+}
+.divider {
+  background-color: #cccccc;
+  height: 2rpx;
+}
+.text_3 {
+  margin-left: 43.34rpx;
+}
+.text-wrapper {
+  margin-left: 29rpx;
+  margin-right: 27rpx;
+  padding: 33.16rpx 0;
+  border-radius: 50rpx;
+  border: solid 2rpx #1e8aef;
+}
+.text_4 {
+  color: #1e8aef;
+  font-size: 34rpx;
+  line-height: 31.42rpx;
+  letter-spacing: 10rpx;
+}
+.page button.text-wrapper {
+  /* 清除 button 默认背景、边框等 */
+  background: transparent;
+  padding: 0;
+  margin: 1;
+  border: none;
+  /* 继承原 view 的样式逻辑 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  align-self: stretch;
+  margin-top: 50rpx; 
+  padding: 33.34rpx 0 29.28rpx;
+  border-radius: 50rpx;
+  border: solid 2rpx #1e8aef;
+  width: 95%;
+}
+/* 处理按钮点击时的默认高亮（按需，若想完全一致可加） */
+.page button.text-wrapper::after {
+  display: none;
+}
+button.text-wrapper:active {
+  background-color: #f0f0f0; 
+  /* 可同时调整其他样式，比如边框颜色等 */
+}

@@ -19,7 +19,6 @@
       placeholder-style="color: #cccccc;"
       style="color: #000000;"
     />
-    <!-- <text class="self-start font text_3">请输入邮箱</text> -->
     <view class="self-stretch divider mt-16"></view>
     <input 
       class="self-start font text_4 mt-16" 

@@ -22,15 +22,15 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/security/security",
-          "pathName": "pages/security/security",
+          "name": "pages/set_security/set_security",
+          "pathName": "pages/set_security/set_security",
           "query": "",
           "launchMode": "default",
           "scene": null
         },
         {
-          "name": "pages/password/password",
-          "pathName": "pages/password/password",
+          "name": "pages/set_password/set_password",
+          "pathName": "pages/set_password/set_password",
           "query": "",
           "launchMode": "default",
           "scene": null

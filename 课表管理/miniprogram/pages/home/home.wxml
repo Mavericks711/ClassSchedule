@@ -31,8 +31,10 @@
         />
       </view>
     </view>
-    <text class="self-start font text_6">修改密码</text>
-    <text class="self-start font text_7">设置密保</text>
+    <navigator url="/pages/set_password/set_password" open-type="navigate" class="self-start font text_6">
+    <text>修改密码</text></navigator>
+    <navigator url="/pages/set_security/set_security" open-type="navigate" class="self-start font text_7">
+    <text>设置密保</text></navigator>
     <navigator url="/pages/home_pre/home_pre" open-type="reLaunch" class="flex-col justify-start items-center text-wrapper">
         <text class="font text_9">退出登录</text>
     </navigator>
