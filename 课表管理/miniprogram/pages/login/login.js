@@ -1,13 +1,11 @@
 // pages/login/login.js
 
-// 使用 Page() 来注册一个页面
 Page({
   
   /**
    * 页面的初始数据
    */
   data: {
-    // 只有控制按钮加载状态的 isLoading 是我们需要的数据
     isLoading: false
   },
 
@@ -16,12 +14,11 @@ Page({
    */
   onLoad: function (options) {
     // 可以在这里做一些页面加载时的初始化工作
+    // 比如，如果用户是从某个需要登录的页面跳转过来的，可以在 options 里接收一个回跳地址
   },
 
   /**
-   * onLoginSubmit 函数：处理表单提交事件。
-   * 这个函数必须是 Page({}) 对象的第一层属性，和 data, onLoad 平级。
-   * @param {object} e - 事件对象，包含了所有表单数据。
+   * onLoginSubmit 函数：处理表单提交事件
    */
   onLoginSubmit: function(e) {
     // 1. 防止重复提交
@@ -29,7 +26,7 @@ Page({
       return;
     }
 
-    // 2. 从事件对象 e.detail.value 中直接获取所有表单数据
+    // 2. 从事件对象中获取表单数据
     const formData = e.detail.value;
     const email = formData.email ? formData.email.trim() : '';
     const password = formData.password ? formData.password.trim() : '';
@@ -53,55 +50,79 @@ Page({
         password: password
       }
     }).then(res => {
-      // 无论成功失败，都结束加载状态
+      // 无论成功失败，都先结束加载状态
       this.setData({ isLoading: false });
       wx.hideLoading();
 
       console.log("【云函数返回】:", res.result);
 
+      // --- 开始处理云函数返回结果 ---
+
       if (res.result && res.result.success) {
-        // --- 登录成功 ---
-      
-        // 1. 将用户信息存入全局和本地缓存 (这些操作很快，先做完)
+        
+        // 分支一：登录成功
+        
+        // 1. 存储用户信息
         getApp().globalData.userInfo = res.result.data;
         wx.setStorageSync('userInfo', res.result.data);
       
-        // 2. 显示一个持续时间稍长（比如1.5秒）的成功提示
-        // wx.showToast 默认的 duration 是 1500ms
+        // 2. 显示成功提示
         wx.showToast({ 
           title: '登录成功', 
           icon: 'success',
           duration: 1500 
         });
       
-        // 3. 【核心修改】使用 setTimeout 设置一个定时器
-        // 在 1500 毫秒（也就是提示框自动消失的时候）后，再执行页面跳转
-        setTimeout(function () {
+        // 3. 延迟后跳转
+        setTimeout(() => {
           wx.switchTab({
             url: '/pages/schedule_week/schedule_week'
           });
-        }, 1500); // 这里的延迟时间最好和 toast 的 duration 保持一致
+        }, 1500);
+
       } else {
-        // --- 登录失败 ---
-        wx.showToast({
-          title: res.result.message || '登录失败，请检查账号密码',
-          icon: 'none',
-          duration: 2000
-        });
+        
+        // 分支二：登录失败 (res.result.success 为 false)
+
+        // 进一步判断失败的原因
+        if (res.result && res.result.code === 'USER_NOT_FOUND') {
+          
+          // 子分支 2.1：用户不存在
+          wx.showModal({
+            title: '提示',
+            content: '该邮箱尚未注册，是否立即注册？',
+            confirmText: '去注册',
+            cancelText: '取消',
+            success: (modalRes) => {
+              if (modalRes.confirm) {
+                // 用户点击“去注册”，带上 email 跳转到注册页
+                wx.navigateTo({
+                  url: `/pages/register/register?email=${email}`
+                });
+              }
+              // 如果用户点击取消，则什么都不做，停留在登录页
+            }
+          });
+
+        } else {
+          
+          // 子分支 2.2：其他失败原因（如密码错误、服务器错误等）
+          // 直接显示后端返回的 message
+          wx.showToast({
+            title: res.result.message || '登录失败，请检查账号密码',
+            icon: 'none',
+            duration: 2000
+          });
+        }
       }
+
     }).catch(err => {
-      // --- 网络或调用异常 ---
+      // 分支三：网络或调用异常
       this.setData({ isLoading: false });
       wx.hideLoading();
       console.error("调用 login 云函数失败:", err);
       wx.showToast({ title: '网络请求失败，请稍后重试', icon: 'none' });
     });
-  },
+  }
 
-  /**
-   * 其他的生命周期函数或自定义函数可以写在下面
-   */
-  // onShow: function() { ... },
-  // onReady: function() { ... },
-
-}) // Page({...}) 的括号在这里结束
+}); // Page({...}) 在这里结束

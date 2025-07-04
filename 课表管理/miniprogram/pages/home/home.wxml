@@ -1,15 +1,24 @@
 <view class="flex-col page">
   <view class="flex-col self-stretch group">
+    <!-- 用户信息区域 -->
     <view class="flex-row items-center self-stretch">
       <image
         class="image"
         src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=57c93919652fed3c98ba120738f54801.png"
       />
-      <view class="ml-16 flex-col items-start">
-        <text class="font text">对对队</text>
-        <text class="text_2 mt-13">Duiduidui@qq.com</text>
+      <!-- 点击这块区域可以修改用户名 -->
+      <view class="ml-16 flex-col items-start user-info-box" bindtap="editUsername">
+        <view class="flex-row items-center">
+          <!-- 动态绑定用户名 -->
+          <text class="font text">{{username}}</text>
+         
+        </view>
+        <!-- 动态绑定邮箱 -->
+        <text class="text_2 mt-13">{{email}}</text>
       </view>
     </view>
+    
+    <!-- 提醒设置区域 -->
     <view class="flex-row items-center self-stretch group_2">
       <text class="font text_3">课前30min提醒</text>
       <view class="flex-row items-center ">
@@ -31,12 +40,18 @@
         />
       </view>
     </view>
+    
+    <!-- 操作菜单 -->
     <navigator url="/pages/set_password/set_password" open-type="navigate" class="self-start font text_6">
-    <text>修改密码</text></navigator>
-    <navigator url="/pages/set_security/set_security" open-type="navigate" class="self-start font text_7">
-    <text>设置密保</text></navigator>
-    <navigator url="/pages/home_pre/home_pre" open-type="reLaunch" class="flex-col justify-start items-center text-wrapper">
-        <text class="font text_9">退出登录</text>
+      <text>修改密码</text>
     </navigator>
+    <navigator url="/pages/set_security/set_security" open-type="navigate" class="self-start font text_7">
+      <text>设置密保</text>
+    </navigator>
+    
+    <!-- 退出登录按钮 -->
+    <view bindtap="logout" class="flex-col justify-start items-center text-wrapper">
+        <text class="font text_9">退出登录</text>
+    </view>
   </view>
 </view>
