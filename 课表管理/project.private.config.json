@@ -22,6 +22,20 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/set_password/set_password",
+          "pathName": "pages/set_password/set_password",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
+          "name": "pages/set_password/set_password",
+          "pathName": "pages/set_password/set_password",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "pages/set_security/set_security",
           "pathName": "pages/set_security/set_security",
           "query": "",

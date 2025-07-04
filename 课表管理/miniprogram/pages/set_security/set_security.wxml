@@ -16,7 +16,7 @@
       class="self-start font text_2" 
       placeholder="请输入密保问题" 
       bindinput="onQuestionInput"
-      value="{{email}}"
+      value="{{securityQuestion}}"
       placeholder-style="color: #cccccc;"
       style="color: #000000;"
     />
@@ -33,5 +33,5 @@
     />
     <view class="mt-16 self-stretch divider"></view>
   </view>
-  <button bindtap="confirm" class="mt-46 flex-col justify-start items-center text-wrapper"><text class="font text_4">确认</text></button>
+  <button bindtap="onSubmit" class="mt-46 flex-col justify-start items-center text-wrapper"><text class="font text_4">确认</text></button>
 </view>
