@@ -9,7 +9,7 @@
         />
         </navigator>
         <text class="text">添加课程</text>
-        <text class="font text_2">保存</text>
+        <text class="font text_2" bindtap="handleSave">保存</text>
       </view>
       <view class="flex-col group_2 mt-41">
         <view class="flex-row items-center">
@@ -27,68 +27,76 @@
           />
           
         </view>
-        <view class="flex-row items-center mt-19" bindtap="showColorPicker">
+        <view class="flex-row items-center mt-19" bindtap="showTextColorPicker">
           <image
             class="image"
             src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=25fcd72fc60f5e53ffd1706794d4da9b.png"
           />
           <text class="font text_4 ml-10" style="color: {{textColor || '#a6a6a6'}}">点此更改文字颜色</text>
-          <!-- <text class="font text_4 ml-10">点此更改文字颜色</text> -->
         </view>
-        <view class="flex-row items-center mt-19">
+        <view class="flex-row items-center mt-19" bindtap="showBlockColorPicker">
           <image
             class="image"
             src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=a1385221803b976b7d40b2e9f0e04b0e.png"
           />
-          <text class="font text_5 ml-11">点此更改方块颜色</text>
+          <text class="font text_5 ml-11" style="color: {{blockTextColor || '#a6a6a6'}}">点此更改方块颜色</text>
         </view>
       </view>
     </view>
-    <view class="flex-col group_3">
-      <view class="flex-col group_1">
-        <view class="flex-row justify-between items-center self-stretch group_8">
-          <text class="text_6">时间段</text>
-          <image
-            class="image"
-            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=36c61d69a8fa847d161dd9f29d7f952d.png"
-          />
+   <!-- 修改为循环渲染时间段 -->
+   <block wx:for="{{timeSlots}}" wx:key="index" wx:for-item="slot">
+      <view class="flex-col group_3" data-index="{{index}}">
+        <view class="flex-col group_1">
+          <view class="flex-row justify-between items-center self-stretch group_8">
+            <text class="text_6">时间段</text>
+            <image
+              class="image"
+              src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=36c61d69a8fa847d161dd9f29d7f952d.png"
+              bindtap="removeTimeSlot"
+              data-index="{{index}}"
+            />
+          </view>
+          <view class="flex-row items-center self-start group_4 mt-6" bindtap="showWeekPicker" data-index="{{index}}">
+            <image class="shrink-0 image" src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=920c143bdd860b66c941fb54048e0615.png" />
+            <text class="font ml-10" style="color: {{slot.weekDisplayText ? '#000000' : '#a6a6a6'}}">{{slot.weekDisplayText || '点此选择周数'}}</text>
+          </view>
         </view>
-        <view class="flex-row items-center self-start group_4 mt-6">
-          <image
-            class="shrink-0 image"
-            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=920c143bdd860b66c941fb54048e0615.png"
-          />
-          <text class=" font ml-10">点此选择周数</text>
+        <view class="flex-col mt-21">
+          <view class="flex-row items-center self-start group_5" bindtap="showTimePicker" data-index="{{index}}">
+            <image class="shrink-0 image_2" src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=1b06c422d5e9ac7677befa7203569fef.png" />
+            <text class="font ml-12" style="color: {{slot.timeDisplayText ? '#000000' : '#a6a6a6'}}">{{slot.timeDisplayText || '点此选择时间'}}</text>
+          </view>
+          <view class="flex-row items-center self-stretch mt-19">
+            <image class="image" src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=8c45db2c905c064790dfa494eb6ad2bc.png" />
+            <input 
+              class="font ml-11" 
+              placeholder="请输入授课老师" 
+              bindblur="bindTeacherInput"
+              value="{{slot.teacher}}"
+              data-index="{{index}}"
+              placeholder-style="color: #a6a6a6;"
+              style="color: #000000;"
+            />
+          </view>
+          <view class="flex-row items-center self-stretch mt-19">
+            <image class="image_3" src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=cb3fd1b963fc61bc0d5996a55423a9ac.png" />
+            <input 
+              class="font ml-7" 
+              placeholder="请输入上课地点" 
+              bindblur="bindLocationInput"
+              value="{{slot.location}}"
+              data-index="{{index}}"
+              placeholder-style="color: #a6a6a6;"
+              style="color: #000000;"
+            />
+          </view>
         </view>
       </view>
-      <view class="flex-col mt-21">
-        <view class="flex-row items-center self-start group_5">
-          <image
-            class="shrink-0 image_2"
-            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=1b06c422d5e9ac7677befa7203569fef.png"
-          />
-          <text class="font ml-12">点此选择时间</text>
-        </view>
-        <view class="flex-row items-center self-stretch mt-19">
-          <image
-            class="image"
-            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=8c45db2c905c064790dfa494eb6ad2bc.png"
-          />
-          <text class="font ml-11">请输入授课老师</text>
-        </view>
-        <view class="flex-row items-center self-stretch mt-19">
-          <image
-            class="image_3"
-            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=cb3fd1b963fc61bc0d5996a55423a9ac.png"
-          />
-          <text class="font ml-7">请输入上课地点</text>
-        </view>
-      </view>
-    </view>
+    </block>
   </view>
-  <view class="flex-col justify-start items-center self-end image-wrapper mt-255">
+  <view class="flex-col justify-start items-center self-end image-wrapper mt-255 fixed-add-btn" bindtap="addTimeSlot">
     <image
-      class="shrink-0 image_4"
+      class="shrink-0 image_4 "
       src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=00a53b0c841078efc0624c2640da72f2.png"
     />
   </view>
@@ -131,7 +139,80 @@
       <!-- 操作按钮 -->
       <view class="color-picker-actions">
         <text class="cancel-btn" bindtap="hideColorPicker">取消</text>
-        <text class="confirm-btn" bindtap="confirmColor">保存</text>
+        <text class="confirm-btn" bindtap="confirmColor">确定</text>
+      </view>
+    </view>
+  </view>
+   <!-- 周数选择器弹窗 -->
+   <view class="week-picker-modal" wx:if="{{showWeekPicker}}">
+    <view class="week-picker-container">
+      <text class="week-picker-title">请选择周数</text>
+      
+      <!-- 周数网格 -->
+      <view class="week-grid">
+        <block wx:for="{{weeks}}" wx:key="index">
+          <view 
+            class="week-item {{selectedWeeks[index] ? 'selected' : ''}}" 
+            bindtap="toggleWeek"
+            data-index="{{index}}"
+          >
+            {{item}}
+          </view>
+        </block>
+      </view>
+      
+      <!-- 操作按钮 -->
+      <view class="week-picker-actions">
+        <text class="cancel-btn" bindtap="hideWeekPicker">取消</text>
+        <text class="confirm-btn" bindtap="confirmWeeks">确定</text>
+      </view>
+    </view>
+  </view>
+    <!-- 在页面底部添加时间选择器弹窗 -->
+  <view class="time-picker-modal" wx:if="{{showTimePicker}}">
+    <view class="time-picker-container">
+      <text class="time-picker-title">请选择时间</text>
+      
+      <!-- 三个选择器并排显示 -->
+      <view class="picker-container">
+        <!-- 星期选择器 -->
+        <view class="picker-column">
+          <picker-view class="picker" indicator-style="height: 50px;" bindchange="bindWeekChange">
+            <picker-view-column>
+              <block wx:for="{{weekDays}}" wx:key="*this">
+                <view class="picker-item {{currentWeekIndex === index ? 'selected' : ''}}">周{{item}}</view>
+              </block>
+            </picker-view-column>
+          </picker-view>
+        </view>
+        
+        <!-- 开始节数选择器 -->
+        <view class="picker-column">
+          <picker-view class="picker" indicator-style="height: 50px;" bindchange="bindStartClassChange">
+            <picker-view-column>
+              <block wx:for="{{classNumbers}}" wx:key="*this">
+                <view class="picker-item {{currentStartClassIndex === index ? 'selected' : ''}}">第{{item}}节</view>
+              </block>
+            </picker-view-column>
+          </picker-view>
+        </view>
+        
+        <!-- 结束节数选择器 -->
+        <view class="picker-column">
+          <picker-view class="picker" indicator-style="height: 50px;" bindchange="bindEndClassChange">
+            <picker-view-column>
+              <block wx:for="{{classNumbers}}" wx:key="*this">
+                <view class="picker-item {{currentStartClassIndex <= index ? '' : 'disabled'}} {{currentEndClassIndex === index ? 'selected' : ''}}">第{{item}}节</view>
+              </block>
+            </picker-view-column>
+          </picker-view>
+        </view>
+      </view>
+      
+      <!-- 操作按钮 -->
+      <view class="time-picker-actions">
+        <text class="cancel-btn" bindtap="hideTimePicker">取消</text>
+        <text class="confirm-btn" bindtap="confirmTime">确定</text>
       </view>
     </view>
   </view>

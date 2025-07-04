@@ -1,9 +1,50 @@
 Page({
- 
+  data: {
+    showColorPicker: false,
+    textColor: '#a6a6a6',
+    blockTextColor: '#a6a6a6',
+    isEditingTextColor: true,
+    currentColor: '#a6a6a6',
+    currentHexColor: 'a6a6a6',
+    cursorX: 100,
+    cursorY: 100,
+    hueValue: 0,
+    brightnessValue: 65,
+
+    // 周数选择器相关数据
+    showWeekPicker: false,
+    weeks: Array.from({length: 16}, (_, i) => i + 1),
+    selectedWeeks: Array(16).fill(false),
+    
+    // 时间选择器相关数据
+    showTimePicker: false,
+    weekDays: ['一', '二', '三', '四', '五', '六', '日'],
+    classNumbers: Array.from({length: 11}, (_, i) => i + 1),
+    
+    // 当前操作的时间段索引
+    currentSlotIndex: 0,
+    
+    // 课程基本信息
+    class: '',
+    teacher: '',
+    location: '',
+    
+    // 多时间段数据
+    timeSlots: [{
+      weekDisplayText: '',
+      timeDisplayText: '',
+      teacher: '',
+      location: '',
+      selectedWeeks: Array(16).fill(false),
+      weekIndex: 0,
+      startClassIndex: 0,
+      endClassIndex: 0
+    }]
+  },
+
   // 输入框输入事件处理函数
   ClassInput(e) {
     const inputValue = e.detail.value;
-    // 正则表达式，匹配仅包含中文、英文的内容
     const reg = /^[a-zA-Z\u4e00-\u9fa5]+$/; 
     if (!reg.test(inputValue)) {
       wx.showToast({
@@ -13,48 +54,124 @@ Page({
       });
       return;
     }
-     // 输入内容符合要求，更新data中的值
-     this.setData({
-      class: inputValue
+    this.setData({ class: inputValue });
+  },
+
+  // 老师输入 - 修改为多时间段版本
+  bindTeacherInput(e) {
+    const index = e.currentTarget.dataset.index;
+    const inputValue = e.detail.value.trim();
+    const reg = /^[a-zA-Z\u4e00-\u9fa5]+$/;
+  
+    if (!reg.test(inputValue)) {
+      wx.showToast({
+        title: '请输入有效的授课老师（中文或英文）',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+  
+    const timeSlots = [...this.data.timeSlots];
+    timeSlots[index].teacher = inputValue;
+    this.setData({ timeSlots });
+  },
+
+  // 地点输入 - 修改为多时间段版本
+  bindLocationInput(e) {
+    const index = e.currentTarget.dataset.index;
+    const inputValue = e.detail.value.trim();
+    const reg = /^[a-zA-Z0-9\u4e00-\u9fa5]+$/;
+  
+    if (!reg.test(inputValue)) {
+      wx.showToast({
+        title: '请输入有效的上课地点',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+  
+    const timeSlots = [...this.data.timeSlots];
+    timeSlots[index].location = inputValue;
+    this.setData({ timeSlots });
+  },
+
+  // 添加时间段
+  addTimeSlot() {
+    const newSlot = {
+      weekDisplayText: '',
+      timeDisplayText: '',
+      teacher: '',
+      location: '',
+      selectedWeeks: Array(16).fill(false),
+      weekIndex: 0,
+      startClassIndex: 0,
+      endClassIndex: 0
+    };
+    this.setData({
+      timeSlots: [...this.data.timeSlots, newSlot]
     });
   },
 
-  data: {
-    showColorPicker: false,
-    textColor: '#a6a6a6', // 默认灰色
-    currentColor: '#a6a6a6',
-    currentHexColor: 'a6a6a6',
-    cursorX: 100,
-    cursorY: 100,
-    hueValue: 0,
-    brightnessValue: 65,
+  // 删除时间段
+  removeTimeSlot(e) {
+    const index = e.currentTarget.dataset.index;
+    const timeSlots = [...this.data.timeSlots];
+    
+    if (timeSlots.length <= 1) {
+      wx.showToast({
+        title: '至少保留一个时间段',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    timeSlots.splice(index, 1);
+    this.setData({ timeSlots });
   },
+
   // 显示颜色选择器
-  showColorPicker: function() {
+  showTextColorPicker() {
     this.setData({
       showColorPicker: true,
+      isEditingTextColor: true,
       currentColor: this.data.textColor,
       currentHexColor: this.data.textColor.substring(1)
     });
   },
+  
+  showBlockColorPicker() {
+    this.setData({
+      showColorPicker: true,
+      isEditingTextColor: false,
+      currentColor: this.data.blockTextColor,
+      currentHexColor: this.data.blockTextColor.substring(1)
+    });
+  },
 
   // 隐藏颜色选择器
-  hideColorPicker: function() {
-    this.setData({
-      showColorPicker: false
-    });
+  hideColorPicker() {
+    this.setData({ showColorPicker: false });
   },
 
   // 确认颜色选择
-  confirmColor: function() {
-    this.setData({
-      textColor: this.data.currentColor,
-      showColorPicker: false
-    });
+  confirmColor() {
+    if (this.data.isEditingTextColor) {
+      this.setData({
+        textColor: this.data.currentColor,
+        showColorPicker: false
+      });
+    } else {
+      this.setData({
+        blockTextColor: this.data.currentColor,
+        showColorPicker: false
+      });
+    }
   },
 
-  // 处理颜色选择
-  handleColorSelect: function(e) {
+  // 颜色选择相关方法保持不变...
+  handleColorSelect(e) {
     const { pageX, pageY } = e.touches[0];
     const query = wx.createSelectorQuery();
     query.select('.color-palette').boundingClientRect();
@@ -64,11 +181,9 @@ Page({
         let x = pageX - palette.left;
         let y = pageY - palette.top;
         
-        // 限制在调色板范围内
         x = Math.max(0, Math.min(x, palette.width));
         y = Math.max(0, Math.min(y, palette.height));
         
-        // 计算颜色
         const hue = (x / palette.width) * 360;
         const brightness = 100 - (y / palette.height) * 100;
         
@@ -84,46 +199,187 @@ Page({
     });
   },
 
-  // 处理色度变化
-  handleHueChange: function(e) {
+  handleHueChange(e) {
     const hue = e.detail.value;
+    const brightness = this.data.brightnessValue;
+    const hex = this.hslToHex(hue, 100, brightness);
+  
     this.setData({
       hueValue: hue,
-      currentColor: this.hslToHex(hue, 100, this.data.brightnessValue),
-      currentHexColor: this.hslToHex(hue, 100, this.data.brightnessValue).substring(1)
+      currentColor: hex,
+      currentHexColor: hex.substring(1)
     });
+  
+    this.updateCursorByHSL(hue, brightness);
   },
 
-  // 处理明度变化
-  handleBrightnessChange: function(e) {
+  handleBrightnessChange(e) {
     const brightness = e.detail.value;
+    const hue = this.data.hueValue;
+    const hex = this.hslToHex(hue, 100, brightness);
+
     this.setData({
       brightnessValue: brightness,
-      currentColor: this.hslToHex(this.data.hueValue, 100, brightness),
-      currentHexColor: this.hslToHex(this.data.hueValue, 100, brightness).substring(1)
+      currentColor: hex,
+      currentHexColor: hex.substring(1)
     });
+
+    this.updateCursorByHSL(hue, brightness);
   },
 
-  // 处理十六进制颜色输入
-  handleHexInput: function(e) {
+  handleHexInput(e) {
     const hex = e.detail.value;
-    if (/^[0-9A-Fa-f]{0,6}$/.test(hex)) {
+    if (/^[0-9A-Fa-f]{6}$/.test(hex)) {
+      const fullHex = '#' + hex;
+      const hsl = this.hexToHSL(fullHex);
+  
       this.setData({
         currentHexColor: hex,
-        currentColor: '#' + hex
+        currentColor: fullHex,
+        hueValue: hsl.h,
+        brightnessValue: hsl.l
       });
-      
-      // 这里可以添加代码更新光标位置
-      // 需要将十六进制颜色转换为HSL然后计算x,y位置
+  
+      this.updateCursorByHSL(hsl.h, hsl.l);
+    } else {
+      this.setData({ currentHexColor: hex });
     }
   },
 
-  // HSL转十六进制颜色
-  hslToHex: function(h, s, l) {
-    h /= 360;
-    s /= 100;
-    l /= 100;
+  // 显示周数选择器 - 修改为多时间段版本
+  showWeekPicker(e) {
+    const index = e.currentTarget.dataset.index;
+    this.setData({
+      currentSlotIndex: index,
+      showWeekPicker: true,
+      selectedWeeks: [...this.data.timeSlots[index].selectedWeeks]
+    });
+  },
+
+  hideWeekPicker() {
+    this.setData({ showWeekPicker: false });
+  },
+
+  // 切换周数选择状态
+  toggleWeek(e) {
+    const index = e.currentTarget.dataset.index;
+    const selectedWeeks = [...this.data.selectedWeeks];
+    selectedWeeks[index] = !selectedWeeks[index];
+    this.setData({ selectedWeeks });
+  },
+
+  // 确认选择的周数 - 修改为多时间段版本
+  confirmWeeks() {
+    const slotIndex = this.data.currentSlotIndex;
+    const timeSlots = [...this.data.timeSlots];
     
+    timeSlots[slotIndex].selectedWeeks = [...this.data.selectedWeeks];
+    timeSlots[slotIndex].weekDisplayText = this.formatWeekDisplay(
+      this.data.weeks.filter((_, i) => this.data.selectedWeeks[i])
+    );
+    
+    this.setData({
+      timeSlots,
+      showWeekPicker: false
+    });
+  },
+
+  // 格式化周数显示文本
+  formatWeekDisplay(weeks) {
+    if (weeks.length === 0) return '';
+    weeks = Array.from(new Set(weeks)).sort((a, b) => a - b);
+
+    let result = '第';
+    let ranges = [];
+    let start = weeks[0];
+    let prev = weeks[0];
+
+    for (let i = 1; i < weeks.length; i++) {
+      const curr = weeks[i];
+      if (curr === prev + 1) {
+        prev = curr;
+      } else {
+        ranges.push(start === prev ? `${start}` : `${start}-${prev}`);
+        start = prev = curr;
+      }
+    }
+
+    ranges.push(start === prev ? `${start}` : `${start}-${prev}`);
+    result += ranges.join('、') + '周';
+    return result;
+  },
+
+  // 显示时间选择器 - 修改为多时间段版本
+  showTimePicker(e) {
+    const index = e.currentTarget.dataset.index;
+    const slot = this.data.timeSlots[index];
+    
+    this.setData({
+      currentSlotIndex: index,
+      showTimePicker: true,
+      currentWeekIndex: slot.weekIndex,
+      currentStartClassIndex: slot.startClassIndex,
+      currentEndClassIndex: slot.endClassIndex
+    });
+  },
+
+  hideTimePicker() {
+    this.setData({ showTimePicker: false });
+  },
+
+  // 星期选择变化
+  bindWeekChange(e) {
+    this.setData({ currentWeekIndex: e.detail.value[0] });
+  },
+
+  // 开始节数选择变化
+  bindStartClassChange(e) {
+    const selectedIndex = e.detail.value[0];
+    this.setData({
+      currentStartClassIndex: selectedIndex,
+      currentEndClassIndex: Math.max(selectedIndex, this.data.currentEndClassIndex)
+    });
+  },
+
+  // 结束节数选择变化
+  bindEndClassChange(e) {
+    this.setData({ currentEndClassIndex: e.detail.value[0] });
+  },
+
+  // 确认时间选择 - 修改为多时间段版本
+  confirmTime() {
+    const slotIndex = this.data.currentSlotIndex;
+    const timeSlots = [...this.data.timeSlots];
+    const startClass = this.data.currentStartClassIndex + 1;
+    const endClass = this.data.currentEndClassIndex + 1;
+    
+    if (endClass < startClass) {
+      wx.showToast({
+        title: '请选择有效的上课时间',
+        icon: 'none'
+      });
+      return;
+    }
+    
+    const weekName = this.data.weekDays[this.data.currentWeekIndex];
+    let displayText = startClass === endClass 
+      ? `周${weekName} 第${startClass}节` 
+      : `周${weekName} 第${startClass}-${endClass}节`;
+    
+    timeSlots[slotIndex].weekIndex = this.data.currentWeekIndex;
+    timeSlots[slotIndex].startClassIndex = this.data.currentStartClassIndex;
+    timeSlots[slotIndex].endClassIndex = this.data.currentEndClassIndex;
+    timeSlots[slotIndex].timeDisplayText = displayText;
+    
+    this.setData({
+      timeSlots,
+      showTimePicker: false
+    });
+  },
+
+  // 颜色转换工具方法保持不变...
+  hslToHex(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
     let r, g, b;
     
     if (s === 0) {
@@ -152,5 +408,94 @@ Page({
     };
     
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+  },
+
+  hexToHSL(hex) {
+    hex = hex.replace('#', '');
+    if (hex.length === 3) {
+      hex = hex.split('').map(c => c + c).join('');
+    }
+    const bigint = parseInt(hex, 16);
+    const r = ((bigint >> 16) & 255) / 255;
+    const g = ((bigint >> 8) & 255) / 255;
+    const b = (bigint & 255) / 255;
+
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = ((g - b) / d + (g < b ? 6 : 0)); break;
+        case g: h = ((b - r) / d + 2); break;
+        case b: h = ((r - g) / d + 4); break;
+      }
+      h /= 6;
+    }
+
+    return {
+      h: Math.round(h * 360),
+      s: Math.round(s * 100),
+      l: Math.round(l * 100)
+    };
+  },
+
+  updateCursorByHSL(hue, brightness) {
+    const query = wx.createSelectorQuery();
+    query.select('.color-palette').boundingClientRect();
+    query.exec((res) => {
+      const palette = res[0];
+      if (palette) {
+        const x = (hue / 360) * palette.width;
+        const y = (1 - brightness / 100) * palette.height;
+        this.setData({ cursorX: x, cursorY: y });
+      }
+    });
+  },
+  // 添加保存处理方法
+  handleSave: function() {
+    // 1. 验证必填字段
+    if (!this.data.class) {
+      wx.showToast({
+        title: '请输入课程名称',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 2. 验证至少有一个有效的时间段
+    const hasValidTimeSlot = this.data.timeSlots.some(slot => 
+      slot.weekDisplayText && slot.timeDisplayText
+    );
+    
+    if (!hasValidTimeSlot) {
+      wx.showToast({
+        title: '请至少设置一个有效的时间段',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 3. 这里可以添加保存到数据库或缓存的逻辑
+    // 例如: 将课程数据保存到全局变量或本地存储
+    // getApp().globalData.courseData = this.data;
+    
+    // 4. 显示成功提示
+    wx.showToast({
+      title: '课程设置成功',
+      icon: 'success',
+      duration: 1500,
+      success: () => {
+        // 5. 提示显示完成后返回页面
+        setTimeout(() => {
+          wx.navigateBack({
+            delta: 1  // 返回上一页
+          });
+        }, 1500);
+      }
+    });
   }
 });
