@@ -1,40 +1,58 @@
+<!-- login.wxml -->
 <view class="flex-col page">
   <view class="flex-col group">
     <view class="flex-row items-baseline self-stretch group_2">
       <text class="text">登录</text>
       <navigator url="/pages/register/register" class="registration-animation">
-      <view class="text-container">
-        <text class="font text_2 ml-12">注册</text>
-      </view>
-    </navigator>
+        <view class="text-container">
+          <text class="font text_2 ml-12">注册</text>
+        </view>
+      </navigator>
     </view>
     <view class="self-start section"></view>
   </view>
-  <view class="flex-col group_3">
-    <input 
-      class="self-start font text_3" 
-      placeholder="请输入邮箱" 
-      bindinput="handleEmailInput"
-      value="{{email}}"
-      placeholder-style="color: #cccccc;"
-      style="color: #000000;"
-    />
-    <view class="self-stretch divider mt-16"></view>
-    <input 
-      class="self-start font text_4 mt-16" 
-      placeholder="请输入密码" 
-      password="true" 
-      bindinput="handlePasswordInput"
-      value="{{password}}"
-      placeholder-style="color: #cccccc;"
-      style="color: #000000;"
-    />
-    <view class="self-stretch divider mt-16"></view>
-    <text class="self-end text_5 mt-16">忘记密码</text>
-    <button bindtap="login" class="flex-col justify-start items-center self-stretch text-wrapper mt-16">
-      <text class="font text_6">登录</text>
-    </button>
-  </view>
+  
+  <!-- 【核心修改】从这里开始 -->
+  <!-- 1. 使用 <form> 组件包裹住所有表单元素 -->
+  <!-- 2. 给 <form> 绑定 bindsubmit 事件，指向新的处理函数 onLoginSubmit -->
+  <form bindsubmit="onLoginSubmit">
+    <view class="flex-col group_3">
+      <!-- 3. 给 email 输入框添加 name="email" 属性 -->
+      <input 
+        name="email"
+        class="self-start font text_3" 
+        placeholder="请输入邮箱"
+        placeholder-style="color: #cccccc;"
+        style="color: #000000;"
+      />
+      <view class="self-stretch divider mt-16"></view>
+      
+      <!-- 4. 给 password 输入框添加 name="password" 属性 -->
+      <input 
+        name="password"
+        class="self-start font text_4 mt-16" 
+        placeholder="请输入密码" 
+        password="true"
+        placeholder-style="color: #cccccc;"
+        style="color: #000000;"
+      />
+      <view class="self-stretch divider mt-16"></view>
+      
+      <text class="self-end text_5 mt-16">忘记密码</text>
+
+      <!-- 5. 修改按钮，去掉 bindtap，增加 form-type="submit" -->
+      <button 
+        form-type="submit" 
+        class="flex-col justify-start items-center self-stretch text-wrapper mt-16"
+        loading="{{isLoading}}"
+      >
+        <text class="font text_6">登录</text>
+      </button>
+    </view>
+  </form>
+  <!-- 【核心修改】到这里结束 -->
+
+  <!-- 你的底部 TabBar 模拟 -->
   <view class="flex-row items-center equal-division">
     <view class="flex-col items-end section_2">
       <image

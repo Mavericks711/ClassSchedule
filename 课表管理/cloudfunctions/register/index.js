@@ -52,6 +52,8 @@ exports.main = async (event, context) => {
         email: email,
         passwordHash: hash, // 存储哈希值
         salt: salt,         // 存储盐
+       
+
         createTime: new Date()
       }
     });
