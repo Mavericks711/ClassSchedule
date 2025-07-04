@@ -66,10 +66,13 @@ exports.main = async (event, context) => {
       data: {
         userId: user._id,
         email: user.email,
-        openid: user._openid
+        openid: user._openid,
+        username: user.username || '对对队' // 返回用户名，如果老用户没有，则给一个默认值
       }
     };
 
+  
+    
   } catch (e) {
     console.error("登录函数异常:", e); // 在日志中打印详细错误
     return {

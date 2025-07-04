@@ -53,7 +53,7 @@ exports.main = async (event, context) => {
         passwordHash: hash, // 存储哈希值
         salt: salt,         // 存储盐
        
-
+        username: '对对队', // 设置默认用户名
         createTime: new Date()
       }
     });
