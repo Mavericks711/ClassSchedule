@@ -46,8 +46,8 @@
         class=" text-wrapper "
         loading="{{isLoading}}"
       >
-        <!-- <text class="font text_6">登录</text> -->
-        <text class="">登录</text>
+        
+        <text>登录</text>
       </button>
     </view>
   </form>
