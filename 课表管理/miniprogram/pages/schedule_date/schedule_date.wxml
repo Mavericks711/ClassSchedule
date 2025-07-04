@@ -1,4 +1,4 @@
-<view class="flex-col page">
+<view class="flex-col page" bindtap="handleOutsideTap">
   <view class="flex-col group">
     <view class="flex-row items-center group_1">
       <view class="flex-col relative group_2">
@@ -13,6 +13,7 @@
         <image
           class="shrink-0 image ml-12"
           src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=a12c7b7d5d8f6124a1bb3e0cb0a724d9.png"
+          bindtap="showSelectMenu"
         />
       </view>
     </view>
@@ -88,5 +89,14 @@
       />
       <text class="font_4 text_17">我的</text>
     </navigator>
+  </view>
+  <view 
+    class="select-menu {{showSelect ? 'show' : ''}}"
+    style="top: {{menuTop}}px; right: {{menuRight}}px;"
+  >
+    <view class="menu-content">
+      <button class="menu-item" bindtap="handleExcelImport">从excel导入</button>
+      <button class="menu-item" bindtap="handleManualAdd">手动添加</button>
+    </view>
   </view>
 </view>

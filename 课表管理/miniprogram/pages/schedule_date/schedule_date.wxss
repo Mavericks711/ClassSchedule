@@ -174,3 +174,52 @@
   font-size: 22rpx;
   line-height: 20.12rpx;
 }
+/* 选择框样式 */
+.select-menu {
+  position: fixed;
+  display: none;
+  z-index: 1000;
+}
+
+.select-menu.show {
+  display: block;
+}
+
+.menu-content {
+   
+  background-color: #fff;
+  border-radius: 8rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+  padding: 16rpx 0;
+  width: 240rpx;
+}
+
+
+/* 清除 button 默认样式，继承 .menu-item 样式 */
+.menu-content button.menu-item {
+  /* 清除默认背景、边框 */
+  background-color: transparent;
+  border: none;
+  /* 清除默认内边距，使用 .menu-item 的 padding */
+  padding: 0; 
+  margin: 0;
+  /* 让 button 宽高自适应内容，或继承父元素宽度 */
+  width: 100%;
+  /* 继承文字样式 */
+  font-size: 28rpx;
+  font-weight:700;
+  color: #333;
+  text-align: center;
+  /* 重新设置内边距，与原 .menu-item 一致 */
+  padding: 12rpx 0; 
+  /* 处理边框，与原 .menu-item 一致 */
+  border-bottom: 1rpx solid #f0f0f0;
+  box-sizing: border-box; /* 确保内边距和边框不影响宽度计算 */
+}
+.menu-item:last-child {
+  border-bottom: none;
+}
+/* 最后一个 button 移除底部边框，与原逻辑一致 */
+.menu-content button.menu-item:last-child {
+  border-bottom: none;
+}

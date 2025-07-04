@@ -1,4 +1,4 @@
-<view class="flex-col page">
+<view class="flex-col page" bindtap="handleOutsideTap">
   <view class="flex-col self-stretch group">
     <view class="flex-col">
       <view class="flex-row items-center group">
@@ -13,9 +13,13 @@
           <image
             class="ml-12 shrink-0 image"
             src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=a12c7b7d5d8f6124a1bb3e0cb0a724d9.png"
+            bindtap="showSelectMenu"
+            
           />
         </view>
       </view>
+      
+   
       <view class="mt-16 flex-col group_3">
         <view class="flex-row justify-between">
           <view class="flex-row items-center self-stretch">
@@ -95,6 +99,15 @@
       <text class="font_6 text_23">11</text>
       <text class="font_6">21:00</text>
       <text class="font_6">21:45</text>
+    </view>
+  </view>
+  <view 
+    class="select-menu {{showSelect ? 'show' : ''}}"
+    style="top: {{menuTop}}px; right: {{menuRight}}px;"
+  >
+    <view class="menu-content">
+      <button class="menu-item" bindtap="handleExcelImport">从excel导入</button>
+      <button class="menu-item" bindtap="handleManualAdd">手动添加</button>
     </view>
   </view>
 </view>

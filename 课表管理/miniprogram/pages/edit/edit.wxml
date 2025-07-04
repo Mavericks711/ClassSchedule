@@ -2,10 +2,12 @@
   <view class="flex-col self-stretch">
     <view class="flex-col group">
       <view class="flex-row items-center">
+        <navigator url="/pages/schedule_week/schedule_week" open-type="navigateBack">
         <image
           class="image"
           src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=47afec6c12d591567e8029b300029808.png"
         />
+        </navigator>
         <text class="text">添加课程</text>
         <text class="font text_2">保存</text>
       </view>
@@ -15,14 +17,23 @@
             class="image"
             src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=7be7a024eab71968a110c8cb218633ea.png"
           />
-          <text class="font text_3 ml-10">课程信息</text>
+          <input 
+            class="font text_3 ml-10" 
+            placeholder="请输入课程名称" 
+            bindblur="ClassInput"
+            value="{{class}}"
+            placeholder-style="color: #a6a6a6;"
+            style="color: #000000;"
+          />
+          
         </view>
-        <view class="flex-row items-center mt-19">
+        <view class="flex-row items-center mt-19" bindtap="showColorPicker">
           <image
             class="image"
             src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=25fcd72fc60f5e53ffd1706794d4da9b.png"
           />
-          <text class="font text_4 ml-10">点此更改文字颜色</text>
+          <text class="font text_4 ml-10" style="color: {{textColor || '#a6a6a6'}}">点此更改文字颜色</text>
+          <!-- <text class="font text_4 ml-10">点此更改文字颜色</text> -->
         </view>
         <view class="flex-row items-center mt-19">
           <image
@@ -47,7 +58,7 @@
             class="shrink-0 image"
             src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=920c143bdd860b66c941fb54048e0615.png"
           />
-          <text class="flex-1 font_2 ml-10">第1 - 16周</text>
+          <text class=" font ml-10">点此选择周数</text>
         </view>
       </view>
       <view class="flex-col mt-21">
@@ -56,21 +67,21 @@
             class="shrink-0 image_2"
             src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=1b06c422d5e9ac7677befa7203569fef.png"
           />
-          <text class="flex-1 font_2 ml-12">周一 第1 - 2节</text>
+          <text class="font ml-12">点此选择时间</text>
         </view>
         <view class="flex-row items-center self-stretch mt-19">
           <image
             class="image"
             src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=8c45db2c905c064790dfa494eb6ad2bc.png"
           />
-          <text class="font ml-11">授课老师（可不填）</text>
+          <text class="font ml-11">请输入授课老师</text>
         </view>
         <view class="flex-row items-center self-stretch mt-19">
           <image
             class="image_3"
             src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=cb3fd1b963fc61bc0d5996a55423a9ac.png"
           />
-          <text class="font ml-7">上课地点（可不填）</text>
+          <text class="font ml-7">请输入上课地点</text>
         </view>
       </view>
     </view>
@@ -80,5 +91,48 @@
       class="shrink-0 image_4"
       src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=00a53b0c841078efc0624c2640da72f2.png"
     />
+  </view>
+  <!-- 颜色选择器弹窗 -->
+  <view class="color-picker-modal" wx:if="{{showColorPicker}}">
+    <view class="color-picker-container">
+      <text class="color-picker-title">请选择颜色</text>
+      
+      <!-- 颜色选择区域 -->
+      <view class="color-palette" bindtouchstart="handleColorSelect" bindtouchmove="handleColorSelect">
+        <view class="color-cursor" style="left: {{cursorX}}px; top: {{cursorY}}px;"></view>
+      </view>
+      
+      <!-- 当前颜色预览 -->
+      <view class="color-preview" style="background-color: {{currentColor ||'#a6a6a6'}}"></view>
+      
+      <!-- 色度和明度滑块 -->
+      <view class="slider-container">
+        <text>色度</text>
+        <slider value="{{hueValue}}" min="0" max="360" bindchange="handleHueChange"/>
+      </view>
+      <view class="slider-container">
+        <text>明度</text>
+        <slider value="{{brightnessValue}}" min="0" max="100" bindchange="handleBrightnessChange"/>
+      </view>
+      
+      <!-- 十六进制颜色输入 -->
+      <view class="hex-input-container">
+        <text>#</text>
+        <input 
+          type="text" 
+          value="{{currentHexColor}}" 
+          placeholder="FFFFFF" 
+          maxlength="6"
+          bindinput="handleHexInput"
+          class="hex-input"
+        />
+      </view>
+      
+      <!-- 操作按钮 -->
+      <view class="color-picker-actions">
+        <text class="cancel-btn" bindtap="hideColorPicker">取消</text>
+        <text class="confirm-btn" bindtap="confirmColor">保存</text>
+      </view>
+    </view>
   </view>
 </view>
