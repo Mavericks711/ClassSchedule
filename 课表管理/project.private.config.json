@@ -22,20 +22,6 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/set_password/set_password",
-          "pathName": "pages/set_password/set_password",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "pages/set_password/set_password",
-          "pathName": "pages/set_password/set_password",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
           "name": "pages/set_security/set_security",
           "pathName": "pages/set_security/set_security",
           "query": "",
@@ -87,13 +73,6 @@
         {
           "name": "pages/login/login",
           "pathName": "pages/login/login",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "pages/home_pre/home_pre",
-          "pathName": "pages/home_pre/home_pre",
           "query": "",
           "launchMode": "default",
           "scene": null

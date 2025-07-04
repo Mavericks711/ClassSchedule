@@ -9,7 +9,6 @@
       </navigator>
       <text class="text ml-11">密保设置</text>
     </view>
-    <view class="self-start section"></view>
   </view>
   <view class="mt-46 flex-col group_2">
     <input 

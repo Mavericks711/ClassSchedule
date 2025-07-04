@@ -149,29 +149,34 @@ navigator::after {
   transform: scale(1.5); /* 放大% */
   color: #000000; /* 变为黑色 */
 }
-.page button.text-wrapper {
-  /* 清除 button 默认背景、边框等 */
-  background: transparent;
+
+/* --- 6. 提交按钮 --- */
+.text-wrapper {
   padding: 0;
-  margin: 1;
   border: none;
-  /* 继承原 view 的样式逻辑 */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  align-self: stretch;
-  margin-top: 32rpx; 
-  padding: 33.34rpx 0 29.28rpx;
-  border-radius: 50rpx;
+  /* 【解决】增大按钮和上方元素的呼吸感 */
+  margin-top: 20rpx; 
+  width: 100% !important;
+  
+  height: 96rpx;
+  line-height: 96rpx;
+  text-align: center;
+  border-radius: 48rpx;
+  background-color: white;
   border: solid 2rpx #1e8aef;
-  width: 100%;
+  color: #1e8aef;
+  font-size: 34rpx;
+  font-weight: 700;
+  letter-spacing: 10rpx; /* 增加文字间距，提升设计感 */
+  
 }
-/* 处理按钮点击时的默认高亮（按需，若想完全一致可加） */
-.page button.text-wrapper::after {
+
+
+button.text-wrapper::after {
   display: none;
 }
+
+/* 按钮按下的效果 */
 button.text-wrapper:active {
-  background-color: #f0f0f0; 
-  /* 可同时调整其他样式，比如边框颜色等 */
+  background-color: #f0f0f0;
 }

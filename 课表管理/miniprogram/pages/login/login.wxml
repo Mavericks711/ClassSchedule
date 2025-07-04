@@ -43,10 +43,11 @@
       <!-- 5. 修改按钮，去掉 bindtap，增加 form-type="submit" -->
       <button 
         form-type="submit" 
-        class="flex-col justify-start items-center self-stretch text-wrapper mt-16"
+        class=" text-wrapper "
         loading="{{isLoading}}"
       >
-        <text class="font text_6">登录</text>
+        <!-- <text class="font text_6">登录</text> -->
+        <text class="">登录</text>
       </button>
     </view>
   </form>
