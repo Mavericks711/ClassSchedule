@@ -25,8 +25,8 @@
           "name": "pages/set_password/set_password",
           "pathName": "pages/set_password/set_password",
           "query": "",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "pages/set_password/set_password",
