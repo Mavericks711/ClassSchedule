@@ -10,7 +10,6 @@ Page({
     cursorY: 100,
     hueValue: 0,
     brightnessValue: 65,
-    courseType: 'required', // 默认选中必修
 
     // 周数选择器相关数据
     showWeekPicker: false,
@@ -456,53 +455,104 @@ Page({
       }
     });
   },
-  // 添加保存处理方法
-  handleSave: function() {
-    // 1. 验证必填字段
-    if (!this.data.class) {
-      wx.showToast({
-        title: '请输入课程名称',
-        icon: 'none'
-      });
-      return;
-    }
 
-    // 2. 验证至少有一个有效的时间段
-    const hasValidTimeSlot = this.data.timeSlots.some(slot => 
-      slot.weekDisplayText && slot.timeDisplayText
-    );
-    
-    if (!hasValidTimeSlot) {
-      wx.showToast({
-        title: '请至少设置一个有效的时间段',
-        icon: 'none'
-      });
-      return;
-    }
-
-    // 3. 这里可以添加保存到数据库或缓存的逻辑
-    // 例如: 将课程数据保存到全局变量或本地存储
-    // getApp().globalData.courseData = this.data;
-    
-    // 4. 显示成功提示
-    wx.showToast({
-      title: '课程设置成功',
-      icon: 'success',
-      duration: 1500,
-      success: () => {
-        // 5. 提示显示完成后返回页面
-        setTimeout(() => {
-          wx.navigateBack({
-            delta: 1  // 返回上一页
-          });
-        }, 1500);
-      }
-    });
-  },
-  // 添加单选框变化处理方法
   radioChange: function(e) {
     this.setData({
       courseType: e.detail.value
     });
+  },
+
+  /**
+ * 核心：保存课程按钮的处理函数
+ * （已优化 Loading 的处理逻辑）
+ */
+handleSave: function() {
+  // 1. 从全局缓存中获取用户邮箱
+  const userEmail = wx.getStorageSync('userInfo')?.email;
+  if (!userEmail) {
+    wx.showToast({ title: '请先登录', icon: 'none' });
+    return;
   }
+
+  // 2. 前端数据校验
+  if (!this.data.class.trim()) {
+    wx.showToast({ title: '请输入课程名称', icon: 'none' });
+    return;
+  }
+  for (let i = 0; i < this.data.timeSlots.length; i++) {
+    const slot = this.data.timeSlots[i];
+    if (!slot.weekDisplayText) {
+      wx.showToast({ title: `请为第${i + 1}个时间段选择周数`, icon: 'none' });
+      return;
+    }
+    if (!slot.timeDisplayText) {
+      wx.showToast({ title: `请为第${i + 1}个时间段选择上课时间`, icon: 'none' });
+      return;
+    }
+  }
+
+  // --- 在所有校验通过后，显示 Loading ---
+  wx.showLoading({ 
+    title: '正在保存...',
+    mask: true // 建议加上 mask，防止用户在保存期间重复点击
+  });
+
+  // 3. 数据转换
+  const postData = {
+    userEmail: userEmail,
+    courseName: this.data.class.trim(),
+    textColor: this.data.textColor,
+    boxColor: this.data.blockTextColor,
+    isRequired: this.data.courseType === 'required',
+    schedules: this.data.timeSlots.map(slot => {
+      const selectedWeekNumbers = this.data.weeks
+        .filter((weekNum, index) => slot.selectedWeeks[index]);
+      return {
+        weeks: selectedWeekNumbers,
+        dayOfWeek: slot.weekIndex + 1,
+        startSession: slot.startClassIndex + 1,
+        endSession: slot.endClassIndex + 1,
+        teacher: slot.teacher.trim(),
+        location: slot.location.trim()
+      };
+    })
+  };
+
+  // 4. 调用云函数
+  wx.cloud.callFunction({
+    name: 'addCourse',
+    data: postData,
+    success: res => {
+      wx.hideLoading();
+      // 在 success 回调中，只处理成功的业务逻辑
+      if (res.result && res.result.success) {
+        wx.showToast({
+          title: '保存成功',
+          icon: 'success',
+          duration: 1500
+        });
+        setTimeout(() => {
+          wx.navigateBack();
+        }, 1500);
+      } else {
+        
+        // 云函数返回了业务错误，也在这里处理
+        wx.showToast({
+          title: res.result.message || '保存失败，请重试',
+          icon: 'none'
+        });
+      }
+    },
+    fail: err => {
+      wx.hideLoading();
+      // 在 fail 回调中，只处理网络层面的失败
+      wx.showToast({
+        title: '请求失败，请检查网络',
+        icon: 'none'
+      });
+      console.error('云函数[addCourse]调用失败', err);
+    },
+ 
+  });
+}
 });
