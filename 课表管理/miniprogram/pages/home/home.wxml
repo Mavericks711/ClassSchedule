@@ -4,7 +4,7 @@
     <view class="flex-row items-center self-stretch">
       <image
         class="image"
-        src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=57c93919652fed3c98ba120738f54801.png"
+        src="/icon/Unregistered_Ava.png"
       />
       <!-- 点击这块区域可以修改用户名 -->
       <view class="ml-16 flex-col items-start user-info-box" bindtap="editUsername">
