@@ -39,14 +39,14 @@
     <view class="flex-col items-end section_2">
       <image
         class="shrink-0 image"
-        src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/68629502d54496f19f748f14/6862953b2b2a8200119c2aa2/17515159668249891185.png"
+        src="/icon/Schedule_Gray.png"
       />
       <text class="font_3 text_7">课表</text>
     </view>
     <view class="flex-col items-end equal-division-item group_4">
       <image
         class="shrink-0 image_2"
-        src="https://ide.code.fun/api/image?token=68674d2f4ae84d0012342d16&name=b428399de64bea7cc88907dc00d251f2.png"
+        src="/icon/My_Blue.png"
       />
       <text class="font_3 text_8">我的</text>
     </view>

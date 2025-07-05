@@ -4,7 +4,7 @@
       <navigator url="/pages/home/home" open-type="navigateBack">
       <image
         class="image"
-        src="https://ide.code.fun/api/image?token=6866034c4ae84d00123406e0&name=47afec6c12d591567e8029b300029808.png"
+        src="/icon/Return.png"
       />
       </navigator>
       <text class="text ml-11">密保设置</text>

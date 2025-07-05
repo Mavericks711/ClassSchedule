@@ -5,7 +5,7 @@
         <navigator url="/pages/schedule_week/schedule_week" open-type="navigateBack">
         <image
           class="image"
-          src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=47afec6c12d591567e8029b300029808.png"
+          src="/icon/Return.png"
         />
         </navigator>
         <text class="text">添加课程</text>
@@ -15,7 +15,7 @@
         <view class="flex-row items-center">
           <image
             class="image"
-            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=7be7a024eab71968a110c8cb218633ea.png"
+            src="/icon/ClassName.png"
           />
           <input 
             class="font text_3 ml-10" 
@@ -30,14 +30,14 @@
         <view class="flex-row items-center mt-19" bindtap="showTextColorPicker">
           <image
             class="image"
-            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=25fcd72fc60f5e53ffd1706794d4da9b.png"
+            src="/icon/TextColorSet.png"
           />
           <text class="font text_4 ml-10" style="color: {{textColor || '#a6a6a6'}}">点此更改文字颜色</text>
         </view>
         <view class="flex-row items-center mt-19" bindtap="showBlockColorPicker">
           <image
             class="image"
-            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=a1385221803b976b7d40b2e9f0e04b0e.png"
+            src="/icon/ClassColorSet.png"
           />
           <text class="font text_5 ml-11" style="color: {{blockTextColor || '#a6a6a6'}}">点此更改方块颜色</text>
         </view>
@@ -51,23 +51,23 @@
             <text class="text_6">时间段</text>
             <image
               class="image"
-              src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=36c61d69a8fa847d161dd9f29d7f952d.png"
+              src="/icon/Delete.png"
               bindtap="removeTimeSlot"
               data-index="{{index}}"
             />
           </view>
           <view class="flex-row items-center self-start group_4 mt-6" bindtap="showWeekPicker" data-index="{{index}}">
-            <image class="shrink-0 image" src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=920c143bdd860b66c941fb54048e0615.png" />
+            <image class="shrink-0 image" src="/icon/Week.png" />
             <text class="font ml-10" style="color: {{slot.weekDisplayText ? '#000000' : '#a6a6a6'}}">{{slot.weekDisplayText || '点此选择周数'}}</text>
           </view>
         </view>
         <view class="flex-col mt-21">
           <view class="flex-row items-center self-start group_5" bindtap="showTimePicker" data-index="{{index}}">
-            <image class="shrink-0 image_2" src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=1b06c422d5e9ac7677befa7203569fef.png" />
+            <image class="shrink-0 image_2" src="/icon/Time.png" />
             <text class="font ml-12" style="color: {{slot.timeDisplayText ? '#000000' : '#a6a6a6'}}">{{slot.timeDisplayText || '点此选择时间'}}</text>
           </view>
           <view class="flex-row items-center self-stretch mt-19">
-            <image class="image" src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=8c45db2c905c064790dfa494eb6ad2bc.png" />
+            <image class="image" src="/icon/Teacher.png" />
             <input 
               class="font ml-11" 
               placeholder="请输入授课老师" 
@@ -79,7 +79,7 @@
             />
           </view>
           <view class="flex-row items-center self-stretch mt-19">
-            <image class="image_3" src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=cb3fd1b963fc61bc0d5996a55423a9ac.png" />
+            <image class="image_3" src="/icon/Location.png" />
             <input 
               class="font ml-7" 
               placeholder="请输入上课地点" 
@@ -97,7 +97,7 @@
   <view class="flex-col justify-start items-center self-end image-wrapper mt-255 fixed-add-btn" bindtap="addTimeSlot">
     <image
       class="shrink-0 image_4 "
-      src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=00a53b0c841078efc0624c2640da72f2.png"
+      src="/icon/Add_1.png"
     />
   </view>
   <!-- 颜色选择器弹窗 -->

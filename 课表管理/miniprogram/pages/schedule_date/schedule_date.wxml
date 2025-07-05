@@ -12,7 +12,7 @@
         <text class="font_2 text_3 ml-12">周</text></navigator>
         <image
           class="shrink-0 image ml-12"
-          src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=a12c7b7d5d8f6124a1bb3e0cb0a724d9.png"
+          src="/icon/Add_2.png"
           bindtap="showSelectMenu"
         />
       </view>
@@ -78,14 +78,14 @@
     <navigator url="/pages/schedule_week/schedule_week" open-type="switchTab" class="flex-col items-end equal-division-item_2 section">
       <image
         class="shrink-0 image_2"
-        src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=7265637f5a4da9b167475f52aaed45d9.png"
+        src="/icon/Schedule_Blue.png"
       />
       <text class="font_4 text_16">课表</text>
     </navigator>
     <navigator url="/pages/home/home" open-type="switchTab" class="flex-col items-end equal-division-item group_14">
       <image
         class="shrink-0 image_3"
-        src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=f771fbba8e7028eb80e7bfbb7d44b857.png"
+        src="/icon/My_Black.png"
       />
       <text class="font_4 text_17">我的</text>
     </navigator>

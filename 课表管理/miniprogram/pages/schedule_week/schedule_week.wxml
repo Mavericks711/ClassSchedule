@@ -12,7 +12,7 @@
           <text class="ml-12 font_2 text_4">周</text>
           <image
             class="ml-12 shrink-0 image"
-            src="https://ide.code.fun/api/image?token=6864903c4ae84d001233e67f&name=a12c7b7d5d8f6124a1bb3e0cb0a724d9.png"
+            src="/icon/Add_2.png"
             bindtap="showSelectMenu"
             
           />
