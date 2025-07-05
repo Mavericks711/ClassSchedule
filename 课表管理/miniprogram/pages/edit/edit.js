@@ -10,6 +10,7 @@ Page({
     cursorY: 100,
     hueValue: 0,
     brightnessValue: 65,
+    courseType: 'required', // 默认选中必修
 
     // 周数选择器相关数据
     showWeekPicker: false,
@@ -496,6 +497,12 @@ Page({
           });
         }, 1500);
       }
+    });
+  },
+  // 添加单选框变化处理方法
+  radioChange: function(e) {
+    this.setData({
+      courseType: e.detail.value
     });
   }
 });

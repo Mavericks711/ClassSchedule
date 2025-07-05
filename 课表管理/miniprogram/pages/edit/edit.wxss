@@ -387,3 +387,15 @@
   width: 100rpx;
   height: 100rpx;
 }
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}

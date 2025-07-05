@@ -41,6 +41,19 @@
           />
           <text class="font text_5 ml-11" style="color: {{blockTextColor || '#a6a6a6'}}">点此更改方块颜色</text>
         </view>
+        <!-- 添加单选框部分 -->
+        <view class="flex-row items-center mt-19">
+          <image class="image" src="/icon/CourseType.png" />
+          <view class="font ml-10" style="color: black;">课程类型</view>
+          <radio-group class="radio-group" bindchange="radioChange">
+            <label class="radio">
+              <radio value="required" checked="{{courseType === 'required'}}" color="{{blockColor || '#3388FF'}}"/>必修
+            </label>
+            <label class="radio ml-20">
+              <radio value="elective" checked="{{courseType === 'elective'}}" color="{{blockColor || '#3388FF'}}"/>选修
+            </label>
+          </radio-group>
+        </view>
       </view>
     </view>
    <!-- 修改为循环渲染时间段 -->
