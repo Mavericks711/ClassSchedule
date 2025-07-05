@@ -14,7 +14,6 @@ Page({
    */
   onLoad: function (options) {
     // 可以在这里做一些页面加载时的初始化工作
-    // 比如，如果用户是从某个需要登录的页面跳转过来的，可以在 options 里接收一个回跳地址
   },
 
   /**
@@ -30,8 +29,6 @@ Page({
     const formData = e.detail.value;
     const email = formData.email ? formData.email.trim() : '';
     const password = formData.password ? formData.password.trim() : '';
-
-    console.log("【Form Submit】获取到的表单数据:", { email, password });
 
     // 3. 前端数据校验
     if (!email || !password) {
