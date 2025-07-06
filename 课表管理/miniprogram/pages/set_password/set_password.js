@@ -100,10 +100,21 @@ Page({
           content: '密码修改成功，请使用新密码重新登录。',
           showCancel: false,
           success: () => {
+            const app = getApp();
+          
+            // 1. 清除缓存中的登录信息
             wx.removeStorageSync('userInfo');
-            getApp().globalData.userInfo = null;
+          
+            // 2. 清空全局数据（包括课表信息）
+            app.globalData.userInfo = null;
+            app.globalData.currentDate = null;
+            app.globalData.currentWeekText = null;
+            app.globalData.openid = null;
+          
+            // 3. 跳转到登录页
             wx.reLaunch({ url: '/pages/login/login' });
           }
+          
         });
       } else {
         wx.showToast({ title: res.result.message || '修改失败', icon: 'none' });

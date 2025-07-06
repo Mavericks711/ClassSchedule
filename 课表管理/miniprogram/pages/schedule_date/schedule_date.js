@@ -2,7 +2,10 @@ Page({
   data: {
     showSelect: false,    // 控制选择框显示状态
     menuTop: 0,           // 选择框顶部位置
-    menuRight: 0          // 选择框右侧位置
+    menuRight: 0,         // 选择框右侧位置
+
+    displayDate: '2025/04/11', // 本地默认值
+    schoolWeekText: '第8周 周五' // 本地默认值
   },
 
   // 显示选择框
@@ -41,10 +44,12 @@ Page({
     this.setData({ showSelect: false });
   },
   onShow() {
-    const app = getApp()
+    const app = getApp();
     this.setData({
-      displayDate: app.globalData.currentDate,
-      schoolWeekText: app.globalData.currentWeekText
-    })
+      displayDate: app.globalData.currentDate || '2025/04/11',
+      schoolWeekText: app.globalData.currentWeekText || '第8周 周五'
+    });
   }
+  
+  
 });

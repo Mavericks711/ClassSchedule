@@ -104,10 +104,21 @@ Page({
       content: '确定要退出登录吗？',
       success: (res) => {
         if (res.confirm) {
+          const app = getApp();
+  
+          // 1. 清除本地缓存
           wx.removeStorageSync('userInfo');
-          wx.reLaunch({ url: '/pages/home_pre/home_pre' }); // 跳转到登录前的首页
+  
+          // 2. 清空 globalData（确保不会保留之前设置的日期）
+          app.globalData.currentDate = null;
+          app.globalData.currentWeekText = null;
+          app.globalData.openid = null;
+  
+          // 3. 强制跳转回登录前首页或启动页
+          wx.reLaunch({ url: '/pages/home_pre/home_pre' });
         }
       }
     });
   }
+  
 });
