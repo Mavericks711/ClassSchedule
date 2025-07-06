@@ -2,8 +2,8 @@
   <view class="flex-col group">
     <view class="flex-row items-center group_1">
       <view class="flex-col relative group_2">
-        <text class="text">2025/04/11</text>
-        <text class="font text_4">第8周 周五</text>
+        <text class="text">{{displayDate}}</text>
+        <text class="font text_4">{{schoolWeekText}}</text>
         <text class="font pos"></text>
       </view>
       <view class="flex-row items-center ml-29">

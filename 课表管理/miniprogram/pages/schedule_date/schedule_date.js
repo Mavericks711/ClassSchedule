@@ -39,5 +39,12 @@ Page({
   // 点击选择框外部关闭选择框
   handleOutsideTap() {
     this.setData({ showSelect: false });
+  },
+  onShow() {
+    const app = getApp()
+    this.setData({
+      displayDate: app.globalData.currentDate,
+      schoolWeekText: app.globalData.currentWeekText
+    })
   }
 });

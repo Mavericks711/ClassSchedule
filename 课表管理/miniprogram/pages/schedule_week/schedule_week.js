@@ -142,6 +142,11 @@ Page({
     // 计算当前周的日期范围（周一到周日）
     const currentWeekDates = this.calculateWeekDates(chosenDate);
   
+     // 更新全局数据
+    const app = getApp()
+    app.globalData.currentDate = dateStr
+    app.globalData.currentWeekText = `第${week}周 周${dayOfWeek}`
+
     this.setData({
       displayDate: dateStr,
       showDatePicker: false,
@@ -242,6 +247,11 @@ Page({
     // 计算当前周的日期范围
     const currentWeekDates = this.calculateWeekDates(targetDate);
     
+    // 更新全局数据
+    const app = getApp()
+    app.globalData.currentDate = `${targetDate.getFullYear()}/${String(targetDate.getMonth() + 1).padStart(2, '0')}/${String(targetDate.getDate()).padStart(2, '0')}`
+    app.globalData.currentWeekText = `第${week}周 周${dayText}`
+
     // 更新数据
     this.setData({
       schoolWeekText: `第${week}周 周${dayText}`,
