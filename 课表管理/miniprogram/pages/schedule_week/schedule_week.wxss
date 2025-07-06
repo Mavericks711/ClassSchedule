@@ -446,3 +446,94 @@
   color: #fff;
   width: 48%;
 }
+
+/* =================================================================== */
+/* ==============  这是新增的核心课程渲染样式  ====================== */
+/* =================================================================== */
+
+.schedule-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20rpx; /* 与顶部日期栏保持一些间距 */
+  width: 100%;
+  position: relative; /* 为课程卡片的绝对定位做准备 */
+}
+
+.timeline {
+  flex-shrink: 0;
+  width: 100rpx; /* 左侧时间轴的宽度 */
+  display: flex;
+  flex-direction: column;
+}
+
+.time-slot {
+  height: 120rpx; /* 每节课的高度，需要与网格行高保持一致 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #888;
+  border-right: 1rpx solid #eee;
+  box-sizing: border-box;
+}
+
+.time-slot-index {
+  font-weight: bold;
+}
+
+.schedule-grid {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border-left: 1rpx solid #eee; /* 与时间轴的分隔线 */
+}
+
+.grid-row {
+  display: flex;
+  flex-direction: row;
+  height: 120rpx; /* 每节课的高度 */
+  border-bottom: 1rpx solid #eee;
+}
+
+.grid-cell {
+  width: calc(100% / 7); /* 每周7天，均分宽度 */
+  position: relative; /* 关键：为课程卡片的绝对定位提供容器 */
+  border-right: 1rpx solid #eee;
+  box-sizing: border-box;
+}
+
+.grid-cell:last-child {
+  border-right: none;
+}
+
+.course-card {
+  position: absolute; /* 关键：让课程卡片可以跨越多行 */
+  top: 0;
+  left: 2rpx; /* 留出一点边距 */
+  right: 2rpx;
+  border-radius: 8rpx;
+  padding: 8rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-size: 22rpx;
+  overflow: hidden;
+  z-index: 10;
+  box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.course-card:active {
+  transform: scale(0.98);
+}
+
+.course-name {
+  font-weight: bold;
+}
+
+.course-location {
+  margin-top: 4rpx;
+  opacity: 0.9;
+}
+

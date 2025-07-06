@@ -8,26 +8,27 @@
     "pages/schedule_week/schedule_week",
     "pages/edit/edit",
     "pages/set_password/set_password",
-    "pages/set_security/set_security"
+    "pages/set_security/set_security",
+    "pages/courseDetail"
   ],
   "tabBar": {
     "selectedColor": "#1e8aef",
     "position": "bottom",
-    "borderStyle":"black",
+    "borderStyle": "black",
     "list": [
       {
-      "pagePath": "pages/schedule_week/schedule_week",
-      "text": "课表",
-      "iconPath": "icon/Schedule_Black.png",
-      "selectedIconPath": "icon/Schedule_Blue.png"
-    },
-    {
-      "pagePath": "pages/home/home",
-      "text": "我的",
-      "iconPath": "icon/My_Black.png",
-      "selectedIconPath": "icon/My_Blue.png"
-    }
-  ]
+        "pagePath": "pages/schedule_week/schedule_week",
+        "text": "课表",
+        "iconPath": "icon/Schedule_Black.png",
+        "selectedIconPath": "icon/Schedule_Blue.png"
+      },
+      {
+        "pagePath": "pages/home/home",
+        "text": "我的",
+        "iconPath": "icon/My_Black.png",
+        "selectedIconPath": "icon/My_Blue.png"
+      }
+    ]
   },
   "window": {
     "navigationBarTextStyle": "black",

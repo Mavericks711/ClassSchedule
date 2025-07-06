@@ -1,0 +1,42 @@
+// /wxs/schedule.wxs
+
+// 这个函数专门用来生成课程卡片的 style 字符串
+// in /wxs/schedule.wxs
+var getCourseStyle = function(course) {
+  if (!course) {
+    return '';
+  }
+  var span = course.span || 1;
+  var height = 'height: calc(' + (span * 100) + '% + ' + ((span - 1) * 2) + 'rpx);';
+  
+  // ✅ 把 bgColor 改为云函数返回的 backgroundColor
+  var bgColor = course.backgroundColor || '#EFEFEF'; 
+  var textColor = course.textColor || '#333333';
+  
+  // ✅ 拼接正确的 CSS 样式
+  return 'background-color: ' + bgColor + '; color: ' + textColor + ';';
+}
+
+
+// 新增：格式化周次数组
+var formatWeeks = function(weeks) {
+  if (!weeks || weeks.length === 0) {
+    return '无';
+  }
+  // 这里可以实现更复杂的逻辑，比如将 [1, 2, 3, 5] 格式化为 "1-3, 5"
+  // 为简单起见，我们先直接用逗号连接
+  return weeks.join(', ') + ' 周';
+}
+
+// 新增：将数字星期转换为中文
+var formatDay = function(day) {
+  var dayMap = ['日', '一', '二', '三', '四', '五', '六'];
+  return dayMap[day] || '未知'; // 假设 1=一, 2=二 ... 0=日
+}
+
+
+module.exports = {
+  getCourseStyle: getCourseStyle, // 保留旧的
+  formatWeeks: formatWeeks,       // 导出新的
+  formatDay: formatDay            // 导出新的
+};

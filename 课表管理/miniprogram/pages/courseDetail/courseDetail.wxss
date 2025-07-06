@@ -1,0 +1,54 @@
+/* /pages/course_detail/course_detail.wxss */
+.page {
+  padding: 32rpx;
+  background-color: #f7f8fa;
+  min-height: 100vh;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* 防止内部元素溢出圆角 */
+}
+
+.header-card {
+  padding: 40rpx 32rpx;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 24rpx;
+}
+
+.tag-container .credit-tag {
+  margin-left: 16rpx;
+}
+
+/* 使用 Vant Weapp 时，可以通过 custom-class 修改样式 */
+/* 如果不用 Vant，直接给对应 view 加 class 即可 */
+.detail-card .van-cell {
+  padding-top: 28rpx;
+  padding-bottom: 28rpx;
+}
+
+.action-container {
+  margin-top: 60rpx;
+}
+
+.action-btn {
+  margin-bottom: 24rpx;
+}
+
+/* 加载和错误状态的容器 */
+.loading-container, .error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}

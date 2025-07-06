@@ -12,8 +12,8 @@ Page({
     selectedYear: 2025,  // 默认2025年
     selectedMonth: 4,    // 默认4月
     selectedDay: 11,     // 默认11日
-    displayDate: '2025/04/11',
-    schoolWeekText: '第8周 周五',
+    displayDate: '请选择日期',
+    schoolWeekText: '请选择周数',
     daysInMonth: [],
 
     showWeekPicker: false,
@@ -25,8 +25,106 @@ Page({
     // --- 新增的数据渲染和状态控制字段 ---
     gridData: [],       // 核心：用于渲染课程表的二维数组
     isLoading: true,    // 控制加载动画的显示
-    currentWeek: 8      // 核心：当前周数，用于向云函数请求数据
+    currentWeek: 8 ,     // 核心：当前周数，用于向云函数请求数据
+
+    sectionTimes: [
+      { start: '08:00', end: '08:45' },
+      { start: '08:55', end: '09:40' },
+      { start: '10:10', end: '10:55' },
+      { start: '11:05', end: '11:50' },
+      { start: '14:30', end: '15:15' },
+      { start: '15:25', end: '16:10' },
+      { start: '16:40', end: '17:25' },
+      { start: '17:35', end: '18:20' },
+      { start: '19:10', end: '19:55' },
+      { start: '20:05', end: '20:50' },
+      { start: '21:00', end: '21:45' },
+    ],
   },
+// =================================================================
+// ======================  1. 新增的核心功能  =======================
+// =================================================================
+/**
+ * 核心函数：从云端加载指定周的课程数据
+ * @param {number} week - 要加载的周数
+ */
+loadScheduleData: function (week) {
+  this.setData({ isLoading: true });
+  wx.showLoading({ title: '加载课程中...' });
+
+  wx.cloud.callFunction({
+    name: 'getSchedule', // 确保你已创建并部署了这个云函数
+    data: {
+      weekNumber: Number(week)
+    }
+  }).then(res => {
+    wx.hideLoading();
+     // ***** 关键调试点 1 *****
+      // 在这里打印一下云函数返回的完整结果
+      console.log('云函数返回结果:', res); 
+      console.log('实际课程数据:', res.result); 
+
+      // 检查 res.result 是否是你期望的数组
+       // ***** 关键调试点 2 *****
+        // 确认这里执行了 setData
+    console.log('准备 setData，数据长度:', res.result.length); 
+    const scheduleList = res.result;
+    const gridData = this.processDataForGrid(scheduleList);
+    this.setData({
+      gridData: gridData,
+      isLoading: false
+    });
+  }).catch(err => {
+    wx.hideLoading();
+    console.error('加载课程表失败', err);
+    wx.showToast({ title: '加载失败', icon: 'none' });
+    this.setData({ isLoading: false });
+  });
+},
+
+/**
+ * 核心函数：将课程列表处理成适合WXML渲染的二维网格
+ * @param {Array} list - 从云函数返回的课程对象数组
+ */
+processDataForGrid: function (list) {
+  // 初始化一个 11节课 x 7天 的空二维数组
+  
+  const grid = Array.from({ length: 11 }, () => Array(7).fill(null));
+
+  // 健壮性检查，防止list为null或undefined时报错
+  if (list && list.length > 0) {
+  
+      list.forEach(course => {
+          const dayIndex = course.day - 1;
+          const startIndex = course.startSection - 1;
+          const span = course.endSection - course.startSection + 1;
+
+          if (dayIndex >= 0 && dayIndex < 7 && startIndex >= 0 && startIndex < 11) {
+              // 将课程对象和计算出的span放入网格
+              grid[startIndex][dayIndex] = { ...course, span: span };
+              // 标记被占用的格子
+              for (let i = 1; i < span; i++) {
+                  if (startIndex + i < 11) {
+                      grid[startIndex + i][dayIndex] = 'occupied';
+                  }
+              }
+          }
+      });
+  }
+  console.log('处理后的网格数据 (gridData):', grid);
+  return grid;
+},
+
+/**
+ * 点击课程卡片跳转到详情页
+ */
+onCourseClick: function (e) {
+  const course = e.currentTarget.dataset.course;
+  // 使用 schedule_id 跳转，这是最稳妥的方式
+  wx.navigateTo({
+    url: `/pages/courseDetail/courseDetail?id=${course.schedule_id}`
+  });
+},
 
 
   
@@ -106,8 +204,7 @@ Page({
             content: `成功导入 ${res.result.courseCount} 门课程, 共 ${res.result.scheduleCount} 个安排。`,
             showCancel: false,
             success() {
-              // 可以在这里触发页面刷新，重新拉取课程数据
-              // this.getCourseList(); 
+              this.loadScheduleData(this.data.currentWeek);
             }
           });
         } else {
@@ -240,8 +337,12 @@ Page({
       // 保留选择的年月日，下次打开选择器时会显示
       selectedYear: selectedYear,
       selectedMonth: selectedMonth,
-      selectedDay: selectedDay
+      selectedDay: selectedDay,
+     // ⭐ 衔接点：更新 data 中的 currentWeek
+      currentWeek: week 
     });
+
+    this.loadScheduleData(week);
   },
   
   // 计算当前周的日期范围（周一到周日）
@@ -343,8 +444,10 @@ Page({
       displayDate: `${targetDate.getFullYear()}/${String(targetDate.getMonth() + 1).padStart(2, '0')}/${String(targetDate.getDate()).padStart(2, '0')}`,
       selectedMonth: targetDate.getMonth() + 1,
       currentWeekDates,
-      showWeekPicker: false
+      showWeekPicker: false,
+      currentWeek: week 
     });
+    this.loadScheduleData(week);
   },
 
   // 在calculateWeekDates方法中修改日期格式

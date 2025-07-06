@@ -1,4 +1,10 @@
+<!-- /pages/schedule_week/schedule_week.wxml -->
+<!-- 在文件最顶部或 <view class="page"> 之前引入 WXS -->
+  <wxs src="../../wxs/schedule.wxs" module="tools" />
+
 <view class="flex-col page" bindtap="handleOutsideTap">
+  
+  <!-- 页面顶部内容 -->
   <view class="flex-col self-stretch group">
     <view class="flex-col">
       <view class="flex-row items-center group">
@@ -14,17 +20,14 @@
             class="ml-12 shrink-0 image"
             src="/icon/Add_2.png"
             bindtap="showSelectMenu"
-            
           />
         </view>
       </view>
       
-   
       <view class="mt-16 flex-col group_3">
         <view class="flex-row justify-between">
           <view class="flex-row items-center self-stretch">
             <text class="font_3 font_number">{{selectedMonth || '4'}}</text>
-            
           </view>
           <text class="self-center font_4">一</text>
           <text class="self-center font_4">二</text>
@@ -45,63 +48,47 @@
           <text class="font_4 text_13" style="width: 14.28%">{{currentWeekDates[6]}}</text>
         </view>
       </view>
-      <view class="mt-16 flex-col items-start">
-        <text class="font_6 text_14">1</text>
-        <text class="font_6">08:00</text>
-        <text class="font_6">08:45</text>
+    </view>
+  </view> <!--  ✅ self-stretch group 的结束标签  -->
+
+  <!-- =================================================================== -->
+  <!-- ==============  【增强版】的核心课程渲染区域  ================ -->
+  <!-- =================================================================== -->
+  <view class="schedule-container">
+    <!-- 左侧时间轴 (现在可以显示具体时间了) -->
+    <view class="timeline">
+      <!-- wx:for 直接遍历我们在 JS 中定义的 sectionTimes 数组 -->
+      <view wx:for="{{sectionTimes}}" wx:key="index" class="time-slot">
+        <view class="time-slot-index">{{index + 1}}</view>
+        <!-- 从 item 中取出开始和结束时间 -->
+        <view class="time-slot-time">{{item.start}}</view>
+        <view class="time-slot-time">{{item.end}}</view>
       </view>
     </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_15">2</text>
-      <text class="font_6">08:55</text>
-      <text class="font_6">09:40</text>
+
+    <!-- 右侧课程网格 (这部分保持不变) -->
+    <view class="schedule-grid">
+      <view wx:for="{{gridData}}" wx:for-item="row" wx:for-index="rowIndex" wx:key="rowIndex" class="grid-row">
+        <view wx:for="{{row}}" wx:for-item="course" wx:for-index="colIndex" wx:key="colIndex" class="grid-cell">
+          <block wx:if="{{course && course !== 'occupied'}}">
+            <view 
+              class="course-card" 
+              style="{{tools.getCourseStyle(course)}}" 
+              data-course="{{course}}"
+              bindtap="onCourseClick"
+            >
+              <text class="course-name">{{course.courseName}}</text>
+              <text class="course-teacher">{{course.teacher}}</text>
+              <text class="course-location">@{{course.location}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
     </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_16">3</text>
-      <text class="font_6">10:10</text>
-      <text class="font_6">10:55</text>
-    </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_17">４</text>
-      <text class="font_6">11:05</text>
-      <text class="font_6">11:50</text>
-    </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_18">5</text>
-      <text class="font_6">14:30</text>
-      <text class="font_6">15:15</text>
-    </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_19">6</text>
-      <text class="font_6">15:25</text>
-      <text class="font_6">16:10</text>
-    </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_20">7</text>
-      <text class="font_6">16:40</text>
-      <text class="font_6">17:25</text>
-    </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_21">8</text>
-      <text class="font_6">17:35</text>
-      <text class="font_6">18:20</text>
-    </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_22">9</text>
-      <text class="font_6">19:10</text>
-      <text class="font_6">19:55</text>
-    </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_23">10</text>
-      <text class="font_6">20:05</text>
-      <text class="font_6">20:50</text>
-    </view>
-    <view class="flex-col items-start mt-27">
-      <text class="font_6 text_23">11</text>
-      <text class="font_6">21:00</text>
-      <text class="font_6">21:45</text>
-    </view>
-  </view>
+  </view> <!--  ✅ schedule-container 的结束标签  -->
+
+
+  <!-- ======================== 页面弹窗部分 ======================== -->
   <view 
     class="select-menu {{showSelect ? 'show' : ''}}"
     style="top: {{menuTop}}px; right: {{menuRight}}px;"
@@ -111,53 +98,35 @@
       <button class="menu-item" bindtap="handleManualAdd">手动添加</button>
     </view>
   </view>
-    <!-- 日期选择弹窗 -->
+
+  <!-- 日期选择弹窗 -->
   <view wx:if="{{showDatePicker}}" class="overlay" bindtap="closeDatePicker">
     <view class="date-picker" catchtap="noop">
       <view class="picker-header">
         <text class="picker-title">选择日期</text>
       </view>
-
-      <!-- 年选择（固定2025） -->
       <view class="picker-row">
         <text class="picker-label">年</text>
         <view class="picker-options">
-          <view
-            class="option {{selectedYear === 2025 ? 'selected' : ''}}"
-            bindtap="toggleYear"
-          >2025</view>
+          <view class="option {{selectedYear === 2025 ? 'selected' : ''}}" bindtap="toggleYear">2025</view>
         </view>
       </view>
-
-      <!-- 月选择（2-6月） -->
       <view class="picker-row">
         <text class="picker-label">月</text>
         <view class="picker-options">
           <block wx:for="{{[2, 3, 4, 5, 6]}}" wx:key="index">
-            <view
-              class="option {{selectedMonth === item ? 'selected' : ''}}"
-              bindtap="toggleMonth"
-              data-month="{{item}}"
-            >{{item}}</view>
+            <view class="option {{selectedMonth === item ? 'selected' : ''}}" bindtap="toggleMonth" data-month="{{item}}">{{item}}</view>
           </block>
         </view>
       </view>
-
-      <!-- 日选择（1-31） -->
       <view class="picker-row">
         <text class="picker-label">日</text>
         <view class="picker-options">
           <block wx:for="{{daysInMonth}}" wx:key="index">
-            <view
-              class="option {{selectedDay === item ? 'selected' : ''}}"
-              bindtap="toggleDay"
-              data-day="{{item}}"
-            >{{item}}</view>
+            <view class="option {{selectedDay === item ? 'selected' : ''}}" bindtap="toggleDay" data-day="{{item}}">{{item}}</view>
           </block>
         </view>
       </view>
-
-      <!-- 按钮 -->
       <view class="picker-footer">
         <button class="cancel-btn" bindtap="closeDatePicker">取消</button>
         <button class="confirm-btn" bindtap="confirmDate">确定</button>
@@ -165,54 +134,37 @@
     </view>
   </view>
 
-
-    <!-- 周选择弹窗 -->
+  <!-- 周选择弹窗 -->
   <view wx:if="{{showWeekPicker}}" class="wp-overlay" bindtap="closeWeekPicker">
     <view class="wp-container" catchtap="noop">
       <view class="wp-header">
         <text class="wp-title">选择周和星期</text>
       </view>
-      
       <view class="wp-content">
-        <!-- 周选择列 -->
         <view class="wp-column">
-          <picker-view 
-            class="wp-picker" 
-            value="{{[weekIndex]}}" 
-            bindchange="bindWeekChange"
-            immediate-change="{{false}}"
-          >
+          <picker-view class="wp-picker" value="{{[weekIndex]}}" bindchange="bindWeekChange" immediate-change="{{false}}">
             <picker-view-column>
-              <view wx:for="{{16}}" wx:key="index" 
-                    class="wp-option {{weekIndex === index ? 'wp-option-selected' : ''}}">
+              <view wx:for="{{16}}" wx:key="index" class="wp-option {{weekIndex === index ? 'wp-option-selected' : ''}}">
                 第{{index + 1}}周
               </view>
             </picker-view-column>
           </picker-view>
         </view>
-        
-        <!-- 星期选择列 -->
         <view class="wp-column">
-          <picker-view 
-            class="wp-picker" 
-            value="{{[dayIndex]}}" 
-            bindchange="bindDayChange"
-            immediate-change="{{false}}"
-          >
+          <picker-view class="wp-picker" value="{{[dayIndex]}}" bindchange="bindDayChange" immediate-change="{{false}}">
             <picker-view-column>
-              <view wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="index"
-                    class="wp-option {{dayIndex === index ? 'wp-option-selected' : ''}}">
+              <view wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="index" class="wp-option {{dayIndex === index ? 'wp-option-selected' : ''}}">
                 周{{item}}
               </view>
             </picker-view-column>
           </picker-view>
         </view>
       </view>
-      
       <view class="wp-footer">
         <button class="wp-cancel-btn" bindtap="closeWeekPicker">取消</button>
         <button class="wp-confirm-btn" bindtap="confirmWeek">确定</button>
       </view>
     </view>
   </view>
-</view>
+
+</view> <!--  ✅ 最外层 page 的结束标签  -->

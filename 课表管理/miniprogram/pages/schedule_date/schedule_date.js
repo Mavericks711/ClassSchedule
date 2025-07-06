@@ -4,8 +4,8 @@ Page({
     menuTop: 0,           // 选择框顶部位置
     menuRight: 0,         // 选择框右侧位置
 
-    displayDate: '2025/04/11', // 本地默认值
-    schoolWeekText: '第8周 周五' // 本地默认值
+    displayDate: '请选择日期', // 本地默认值
+    schoolWeekText: '请选择周数' // 本地默认值
   },
 
   // 显示选择框
