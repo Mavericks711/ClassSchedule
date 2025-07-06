@@ -1,5 +1,9 @@
 // app.js
 App({
+  globalData: {
+    currentDate: '2025/04/11',
+    currentWeekText: '第8周 周五'
+  },
   onLaunch: function () {
     wx.cloud.init({
       env: 'cloud1-9g6zgl8h39903d5d', // 在云开发控制台设置里查看
