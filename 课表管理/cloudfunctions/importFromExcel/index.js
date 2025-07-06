@@ -92,6 +92,7 @@ exports.main = async (event, context) => {
 
     for (const [name, courseData] of coursesMap.entries()) {
       // 检查该用户的课程是否已存在
+      
       const existingCourse = await db.collection('courses').where({
         courseName: name,
         _openid: OPENID
@@ -130,6 +131,7 @@ exports.main = async (event, context) => {
           endSection: timeInfo.endSection,
           _openid: OPENID
         };
+        console.log('即将存入数据库的数据:', JSON.stringify(courseData, null, 2));
         schedulePromises.push(db.collection('courses_schedule').add({ data: scheduleData }));
         scheduleCount++;
       }

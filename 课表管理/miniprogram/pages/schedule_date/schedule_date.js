@@ -55,10 +55,9 @@ Page({
     wx.cloud.uploadFile({
       cloudPath: cloudPath,
       filePath: filePath,
-      // ⭐ 这里也可以使用箭头函数
       success: (res) => {
         console.log('上传成功, FileID:', res.fileID);
-        this.callImportFunction(res.fileID); // ✅ 直接用 this
+        this.callImportFunction(res.fileID); // 直接用 this
       },
       fail: (err) => {
         wx.hideLoading();

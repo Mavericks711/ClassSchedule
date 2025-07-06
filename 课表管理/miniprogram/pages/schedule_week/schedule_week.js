@@ -20,9 +20,16 @@ Page({
     weekIndex: 7, // 默认第8周
     dayIndex: 4,  // 默认周五
 
-    currentWeekDates: ['04/7', '04/8', '04/9', '04/10', '04/11', '04/12', '04/13'] // 初始值
+    currentWeekDates: ['04/7', '04/8', '04/9', '04/10', '04/11', '04/12', '04/13'], // 初始值
+
+    // --- 新增的数据渲染和状态控制字段 ---
+    gridData: [],       // 核心：用于渲染课程表的二维数组
+    isLoading: true,    // 控制加载动画的显示
+    currentWeek: 8      // 核心：当前周数，用于向云函数请求数据
   },
 
+
+  
   // 显示选择框
   showSelectMenu(e) {
     // 获取图标的位置
@@ -84,8 +91,6 @@ Page({
     });
   },
 
-
-  
   callImportFunction: function(fileID) {
     wx.cloud.callFunction({
       name: 'importFromExcel', // 你将要创建的云函数名称
