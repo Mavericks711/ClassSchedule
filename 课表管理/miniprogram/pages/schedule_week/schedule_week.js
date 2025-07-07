@@ -41,6 +41,22 @@ Page({
       { start: '21:00', end: '21:45' },
     ],
   },
+    // 在周课表页面的js文件中添加onLoad方法
+  onLoad: function(options) {
+    // 从全局数据获取默认值
+    const app = getApp();
+    
+    // 设置默认值
+    this.setData({
+      displayDate: app.globalData.currentDate || '2025/04/11',
+      schoolWeekText: app.globalData.currentWeekText || '第8周 周五',
+      currentWeek: 8, // 默认第8周
+      currentWeekDates: this.calculateWeekDates(new Date('2025-04-11')) // 计算第8周的日期范围
+    });
+
+    // 加载第8周的课程数据
+    this.loadScheduleData(8);
+  },
 // =================================================================
 // ======================  1. 新增的核心功能  =======================
 // =================================================================
