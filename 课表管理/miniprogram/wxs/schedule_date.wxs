@@ -1,0 +1,16 @@
+var getCourseStyle = function(course) {
+  if (!course) return '';
+  
+  var span = course.span || 1;
+  var height = 'height: calc(' + (span * 100) + '% + ' + ((span - 1) * 2) + 'rpx);';
+  
+  // 使用课程设置的颜色
+  var bgColor = course.backgroundColor || '#EFEFEF';
+  var textColor = course.textColor || '#333333';
+  
+  return height + 'background-color: ' + bgColor + '; color: ' + textColor + ';';
+}
+
+module.exports = {
+  getCourseStyle: getCourseStyle
+};

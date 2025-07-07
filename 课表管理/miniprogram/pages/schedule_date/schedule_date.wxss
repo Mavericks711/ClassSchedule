@@ -224,3 +224,77 @@
   border-bottom: none;
 }
 
+/* 日课表整体样式 */
+.daily-schedule {
+  margin-top: 20rpx;
+}
+
+/* 每节课的容器 */
+.schedule-item {
+  display: flex;
+  margin-bottom: 10rpx;
+  height: 120rpx;
+}
+
+/* 时间信息部分 */
+.time-info {
+  width: 100rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1rpx solid #eee;
+}
+
+.section-number {
+  font-weight: bold;
+  font-size: 28rpx;
+}
+
+.time-text {
+  font-size: 24rpx;
+  color: #888;
+}
+
+/* 课程内容部分 */
+.course-container {
+  flex: 1;
+  position: relative;
+  border-bottom: 1rpx solid #eee;
+}
+
+/* 课程卡片样式 */
+.course-card {
+  position: absolute;
+  top: 2rpx;
+  left: 2rpx;
+  right: 2rpx;
+  border-radius: 8rpx;
+  padding: 8rpx;
+  display: flex;
+  flex-direction: column;
+  font-size: 22rpx;
+  box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.course-name {
+  font-weight: bold;
+}
+
+.course-teacher,
+.course-location {
+  margin-top: 4rpx;
+  font-size: 20rpx;
+  opacity: 0.9;
+}
+
+/* 被占用的课程格子 */
+.occupied-slot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+}

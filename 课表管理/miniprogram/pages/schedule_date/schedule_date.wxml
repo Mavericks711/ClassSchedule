@@ -1,3 +1,5 @@
+<!-- 在文件顶部引入WXS -->
+<wxs src="../../wxs/schedule_date.wxs" module="tools" />
 <view class="flex-col page" bindtap="handleOutsideTap">
   <view class="flex-col group">
     <view class="flex-row items-center group_1">
@@ -9,7 +11,8 @@
       <view class="flex-row items-center ml-29">
         <text class="font_2 text_2">日</text>
         <navigator url="/pages/schedule_week/schedule_week" open-type="switchTab">
-        <text class="font_2 text_3 ml-12">周</text></navigator>
+          <text class="font_2 text_3 ml-12">周</text>
+        </navigator>
         <image
           class="shrink-0 image ml-12"
           src="/icon/Add_2.png"
@@ -17,83 +20,48 @@
         />
       </view>
     </view>
-    <view class="flex-col items-start group_3">
-      <text class="font_3 text_5">1</text>
-      <text class="font_3">08:00</text>
-      <text class="font_3">08:45</text>
-    </view>
-    <view class="flex-col items-start group_4">
-      <text class="font_3 text_6">2</text>
-      <text class="font_3">08:55</text>
-      <text class="font_3">09:40</text>
-    </view>
-    <view class="flex-col items-start group_5">
-      <text class="font_3 text_7">3</text>
-      <text class="font_3">10:10</text>
-      <text class="font_3">10:55</text>
-    </view>
-    <view class="flex-col items-start group_6">
-      <text class="font_3 text_8">４</text>
-      <text class="font_3">11:05</text>
-      <text class="font_3">11:50</text>
-    </view>
-    <view class="flex-col items-start group_7">
-      <text class="font_3 text_9">5</text>
-      <text class="font_3">14:30</text>
-      <text class="font_3">15:15</text>
-    </view>
-    <view class="flex-col items-start group_8">
-      <text class="font_3 text_10">6</text>
-      <text class="font_3">15:25</text>
-      <text class="font_3">16:10</text>
-    </view>
-    <view class="flex-col items-start group_9">
-      <text class="font_3 text_11">7</text>
-      <text class="font_3">16:40</text>
-      <text class="font_3">17:25</text>
-    </view>
-    <view class="flex-col items-start group_10">
-      <text class="font_3 text_12">8</text>
-      <text class="font_3">17:35</text>
-      <text class="font_3">18:20</text>
-    </view>
-    <view class="flex-col items-start group_11">
-      <text class="font_3 text_13">9</text>
-      <text class="font_3">19:10</text>
-      <text class="font_3">19:55</text>
-    </view>
-    <view class="flex-col items-start group_12">
-      <text class="font_3 text_14">10</text>
-      <text class="font_3">20:05</text>
-      <text class="font_3">20:50</text>
-    </view>
-    <view class="flex-col items-start group_13">
-      <text class="font_3 text_15">11</text>
-      <text class="font_3">21:00</text>
-      <text class="font_3">21:45</text>
+    
+    <!-- 日课表主体 -->
+  <view class="daily-schedule">
+    <view wx:for="{{sectionTimes}}" wx:key="index" class="schedule-item">
+      <view class="time-info">
+        <text class="section-number">{{index + 1}}</text>
+        <text class="time-text">{{item.start}}</text>
+        <text class="time-text">{{item.end}}</text>
+      </view>
+      <view class="course-container">
+        <block wx:if="{{dailyCourses[index] && dailyCourses[index].isStart}}">
+          <view 
+            class="course-card" 
+            style="{{tools.getCourseStyle(dailyCourses[index])}}"
+            data-course="{{dailyCourses[index]}}"
+            bindtap="onCourseClick"
+          >
+            <text class="course-name">{{dailyCourses[index].courseName}}</text>
+            <text class="course-teacher">{{dailyCourses[index].teacher}}</text>
+            <text class="course-location">@{{dailyCourses[index].location}}</text>
+          </view>
+        </block>
+        <block wx:elif="{{dailyCourses[index] === 'occupied'}}">
+          <view class="occupied-slot"></view>
+        </block>
+      </view>
     </view>
   </view>
 
+  <!-- 底部导航栏 -->
   <view class="flex-row mt-170">
     <navigator url="/pages/schedule_week/schedule_week" open-type="switchTab" class="flex-col items-end equal-division-item_2 section">
-      <image
-        class="shrink-0 image_2"
-        src="/icon/Schedule_Blue.png"
-      />
+      <image class="shrink-0 image_2" src="/icon/Schedule_Blue.png" />
       <text class="font_4 text_16">课表</text>
     </navigator>
     <navigator url="/pages/home/home" open-type="switchTab" class="flex-col items-end equal-division-item group_14">
-      <image
-        class="shrink-0 image_3"
-        src="/icon/My_Black.png"
-      />
+      <image class="shrink-0 image_3" src="/icon/My_Black.png" />
       <text class="font_4 text_17">我的</text>
     </navigator>
   </view>
-  <view 
-    class="select-menu {{showSelect ? 'show' : ''}}"
-    style="top: {{menuTop}}px; right: {{menuRight}}px;"
-  >
+
+  <view class="select-menu {{showSelect ? 'show' : ''}}" style="top: {{menuTop}}px; right: {{menuRight}}px;">
     <view class="menu-content">
       <button class="menu-item" bindtap="handleExcelImport">从excel导入</button>
       <button class="menu-item" bindtap="handleManualAdd">手动添加</button>
