@@ -10,6 +10,7 @@ Page({
     cursorY: 100,
     hueValue: 0,
     brightnessValue: 65,
+    courseType: 'required', 
 
     // 周数选择器相关数据
     showWeekPicker: false,
@@ -502,16 +503,16 @@ handleSave: function() {
     userEmail: userEmail,
     courseName: this.data.class.trim(),
     textColor: this.data.textColor,
-    boxColor: this.data.blockTextColor,
-    isRequired: this.data.courseType === 'required',
+    backgroundColor: this.data.blockTextColor,
+    isElective: this.data.courseType === 'elective',
     schedules: this.data.timeSlots.map(slot => {
       const selectedWeekNumbers = this.data.weeks
         .filter((weekNum, index) => slot.selectedWeeks[index]);
       return {
         weeks: selectedWeekNumbers,
-        dayOfWeek: slot.weekIndex + 1,
-        startSession: slot.startClassIndex + 1,
-        endSession: slot.endClassIndex + 1,
+        day: slot.weekIndex + 1,//星期几
+        startSection: slot.startClassIndex + 1,
+        endSection: slot.endClassIndex + 1,
         teacher: slot.teacher.trim(),
         location: slot.location.trim()
       };

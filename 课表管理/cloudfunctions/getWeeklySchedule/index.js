@@ -9,15 +9,24 @@ const db = cloud.database();
 
 // 云函数主入口函数
 exports.main = async (event, context) => {
-  const { weekNumber } = event;
+  const { weekNumber,userEmail } = event;
+
+  if (!userEmail) {
+    console.error('[getSchedule] 调用失败：前端未提供 userEmail。');
+    // 如果没有用户信息，直接返回空数组，防止泄露任何数据
+    return []; 
+  }
 
   if (typeof weekNumber !== 'number' || weekNumber <= 0) {
     throw new Error('无效的周数参数');
   }
 
+  console.log(`--- [调试 MATCH] --- 正在为用户 [${userEmail}] 查询第 [${weekNumber}] 周的数据`);
+  
   try {
     const res = await db.collection('courses_schedule').aggregate()
       .match({
+        user_email: userEmail,
         weeks: weekNumber
       })
       .lookup({
@@ -27,7 +36,6 @@ exports.main = async (event, context) => {
         as: 'courseInfoArray'
       })
       .unwind('$courseInfoArray')
-      
       // ===== 根据日志证据修正的最终版本 =====
       .addFields({
         // 1. 从 courseInfoArray 中获取 courseName
@@ -44,12 +52,20 @@ exports.main = async (event, context) => {
 
       // ===== 清理掉不再需要的临时字段 =====
       .project({
-        courseInfoArray: 0, // 移除临时的 courseInfoArray 对象
-        // courseId, _openid 等字段如果前端不需要，也可以在这里设为 0 来移除
+        courseInfoArray: 0,
+        _id: 0,
+        // 如果你的 courses 表的主信息字段是 'name', 'backgroundColor' 等，
+        // 而不是 'courseName', 那么就不需要 project 它们了。
+        // 如果字段名不一致，需要在这里重命名。
+        // 假设 `courses` 表里是 `name`, `backgroundColor`
+        // 而 `courses_schedule` 里是 `courseId`, `teacher`, `location`
+        // 合并后，所有字段都在顶层了，无需重命名。
+        // 我们只需要移除不需要的即可。
+        user_email: 0,
+        createdAt: 0
       })
       .end();
 
-    // 注意：这里不再需要 console.log 调试了，可以删掉
     return res.list;
 
   } catch (err) {

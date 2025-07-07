@@ -9,8 +9,11 @@ const db = cloud.database();
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  // 1. 从 event 对象中获取前端传递的所有数据，包括 userEmail
-  const { userEmail, courseName, textColor, boxColor, isRequired, schedules } = event;
+  // 1. 从 event 对象中获取前端传递的所有数据
+  // ===== 修改区域 开始 =====
+  const { userEmail, courseName, textColor, backgroundColor, isElective, schedules } = event;
+  // ===== 修改区域 结束 =====
+
 
   // 2. 数据校验（核心是检查邮箱是否存在）
   if (!userEmail) {
@@ -29,17 +32,22 @@ exports.main = async (event, context) => {
   // 3. 使用数据库事务创建课程
   try {
     const result = await db.runTransaction(async transaction => {
-      // 4. 在 `courses` 集合中插入主课程信息，并明确存入 user_email
+
+      // ===== 修改区域 开始 =====
+      // 4. 在 `courses` 集合中插入主课程信息
       const courseRes = await transaction.collection('courses').add({
         data: {
-          user_email: userEmail, // <--- 使用前端传来的 email
-          name: courseName,
+          // 变动点：字段名从 userEmail 改为 user_email 以保持风格统一
+          user_email: userEmail,
+          courseName: courseName,
           textColor: textColor || '#FFFFFF',
-          boxColor: boxColor || '#3498DB',
-          isRequired: isRequired,
+          // 变动点：字段名从 backgroundColor 改为 boxColor
+          backgroundColor: backgroundColor || '#3498DB', 
+          isElective: isElective,
           createdAt: db.serverDate()
         }
       });
+      // ===== 修改区域 结束 =====
 
       if (!courseRes._id) {
         await transaction.rollback('创建课程主信息失败');
@@ -50,18 +58,26 @@ exports.main = async (event, context) => {
 
       // 5. 准备要插入的课程安排数据
       const scheduleTasks = schedules.map(schedule => {
+
+        // ===== 修改区域 开始 =====
+        // 变动点：集合名从 'courses1_schedule' 改为 'courses_schedule'
         return transaction.collection('courses_schedule').add({
           data: {
-            course_id: newCourseId,
-            user_email: userEmail, // <--- 同样存入 email
-            weeks: schedule.weeks,
-            day_of_week: schedule.dayOfWeek,
-            start_session: schedule.startSession,
-            end_session: schedule.endSession,
+            // 变动点：字段名从 courseId 改为 course_id
+            courseId: newCourseId,
+            // 变动点：字段名从 userEmail 改为 user_email
+            user_email: userEmail,
+            // 变动点：确保 weeks 是数字数组，以防万一
+            weeks: Array.isArray(schedule.weeks) ? schedule.weeks.map(Number) : [],
+            // 变动点：确保 day, startSection, endSection 是数字
+            day: Number(schedule.day),
+            startSection: Number(schedule.startSection),
+            endSection: Number(schedule.endSection),
             teacher: schedule.teacher || '',
             location: schedule.location || ''
           }
         });
+        // ===== 修改区域 结束 =====
       });
 
       // 6. 并发插入所有课程安排

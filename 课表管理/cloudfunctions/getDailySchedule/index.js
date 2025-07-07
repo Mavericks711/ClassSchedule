@@ -28,9 +28,9 @@ exports.main = async (event, context) => {
         from: 'courses',
         localField: 'courseId',
         foreignField: '_id',
-        as: 'courseInfoArray'
+        as: 'courseInfo'
       })
-      .unwind('$courseInfoArray')
+      .unwind('$courseInfo')
       .addFields({
         // 以下字段名请确保与你最终版本一致
         courseName: '$courseInfoArray.courseName',
@@ -40,7 +40,7 @@ exports.main = async (event, context) => {
         textColor: { $ifNull: ['$courseInfoArray.textColor', '#333333'] }
       })
       .project({
-        courseInfoArray: 0,
+        courseInfo: 0,
         courseId: 0
       })
       // ✅ 新增：按开始节数排序，确保课程从早到晚显示

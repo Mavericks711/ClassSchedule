@@ -46,9 +46,13 @@ function parseTime(timeStr) {
 
 // --- 主函数 ---
 exports.main = async (event, context) => {
-  const { OPENID } = cloud.getWXContext();
-  const { fileID } = event;
+  // 变动点: 从 event 中也获取 userEmail，这是前端必须传递过来的
+  const { fileID, userEmail } = event;
 
+  if (!userEmail) {
+    // 增加一个校验，确保前端传了邮箱过来
+    return { success: false, message: '用户信息缺失，无法导入' };
+  }
   try {
     // 1. 从云存储下载文件
     const res = await cloud.downloadFile({ fileID });
@@ -81,7 +85,7 @@ exports.main = async (event, context) => {
           isElective: String(isElectiveStr).trim() === '是',
           textColor: String(textColor || '#FFFFFF'),
           backgroundColor: String(bgColor || '#4A90E2'),
-          _openid: OPENID
+          user_email: userEmail 
         });
       }
     });
@@ -95,7 +99,7 @@ exports.main = async (event, context) => {
       
       const existingCourse = await db.collection('courses').where({
         courseName: name,
-        _openid: OPENID
+        user_email: userEmail 
       }).get();
 
       if (existingCourse.data.length > 0) {
@@ -129,9 +133,9 @@ exports.main = async (event, context) => {
           day: timeInfo.day,
           startSection: timeInfo.startSection,
           endSection: timeInfo.endSection,
-          _openid: OPENID
+          user_email: userEmail 
         };
-        console.log('即将存入数据库的数据:', JSON.stringify(courseData, null, 2));
+        console.log('即将存入数据库的数据:', JSON.stringify(scheduleData, null, 2));
         schedulePromises.push(db.collection('courses_schedule').add({ data: scheduleData }));
         scheduleCount++;
       }

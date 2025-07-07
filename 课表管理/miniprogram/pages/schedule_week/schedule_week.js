@@ -72,10 +72,17 @@ Page({
 loadScheduleData: function (week) {
   this.setData({ isLoading: true });
   wx.showLoading({ title: '加载课程中...' });
+  
+  const userEmail = wx.getStorageSync('userInfo')?.email;
+  if (!userEmail) {
+    wx.showToast({ title: '请先登录', icon: 'none' });
+    return;
+  }
 
   wx.cloud.callFunction({
-    name: 'getSchedule', // 确保你已创建并部署了这个云函数
+    name: 'getWeeklySchedule', // 确保你已创建并部署了这个云函数
     data: {
+      userEmail: userEmail,
       weekNumber: Number(week)
     }
   }).then(res => {
@@ -136,9 +143,8 @@ processDataForGrid: function (list) {
   return grid;
 },
 
-/**
- * 点击课程卡片跳转到详情页
- */
+
+//
 onCourseClick: function (e) {
   const course = e.currentTarget.dataset.course;
   // 使用 schedule_id 跳转，这是最稳妥的方式
@@ -211,10 +217,23 @@ onCourseClick: function (e) {
   },
 
   callImportFunction: function(fileID) {
+    const userInfo = wx.getStorageSync('userInfo'); // 假设你的用户信息存在这里
+
+    // 2. 增加一个保护，如果本地没有用户信息（比如用户未登录），则提示并中断
+    if (!userInfo || !userInfo.email) {
+      wx.hideLoading(); // 隐藏之前可能显示的 loading
+      wx.showToast({
+        title: '请先登录再导入',
+        icon: 'none'
+      });
+      return; // 中断执行
+    }
+
     wx.cloud.callFunction({
       name: 'importFromExcel', // 你将要创建的云函数名称
       data: {
-        fileID: fileID
+        fileID: fileID,
+        userEmail: userInfo.email 
       },
       success: res => {
         wx.hideLoading();
@@ -224,8 +243,11 @@ onCourseClick: function (e) {
             title: '导入成功',
             content: `成功导入 ${res.result.courseCount} 门课程, 共 ${res.result.scheduleCount} 个安排。`,
             showCancel: false,
-            success() {
-              this.loadScheduleData(this.data.currentWeek);
+            success: (modalRes) => {
+              // 在箭头函数中，this 正确地指向 Page 实例
+              if (modalRes.confirm) { // 通常需要判断用户点击了确定按钮
+                this.loadScheduleData(this.data.currentWeek);
+              }
             }
           });
         } else {
