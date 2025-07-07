@@ -1,4 +1,3 @@
-<!-- 在文件顶部引入WXS -->
 <wxs src="../../wxs/schedule_date.wxs" module="tools" />
 <view class="flex-col page" bindtap="handleOutsideTap">
   <view class="flex-col group">
@@ -6,48 +5,40 @@
       <view class="flex-col relative group_2">
         <text class="text">{{displayDate}}</text>
         <text class="font text_4">{{schoolWeekText}}</text>
-        <text class="font pos"></text>
       </view>
       <view class="flex-row items-center ml-29">
         <text class="font_2 text_2">日</text>
         <navigator url="/pages/schedule_week/schedule_week" open-type="switchTab">
           <text class="font_2 text_3 ml-12">周</text>
         </navigator>
-        <image
-          class="shrink-0 image ml-12"
-          src="/icon/Add_2.png"
-          bindtap="showSelectMenu"
-        />
+        <image class="shrink-0 image ml-12" src="/icon/Add_2.png" bindtap="showSelectMenu" />
       </view>
     </view>
     
-    <!-- 日课表主体 -->
-  <view class="daily-schedule">
-    <view wx:for="{{sectionTimes}}" wx:key="index" class="schedule-item">
-      <view class="time-info">
-        <text class="section-number">{{index + 1}}</text>
-        <text class="time-text">{{item.start}}</text>
-        <text class="time-text">{{item.end}}</text>
-      </view>
-      <view class="course-container">
-        <block wx:if="{{dailyCourses[index] && dailyCourses[index].isStart}}">
-          <view 
-            class="course-card" 
-            style="{{tools.getCourseStyle(dailyCourses[index])}}"
-            data-course="{{dailyCourses[index]}}"
-            bindtap="onCourseClick"
-          >
-            <text class="course-name">{{dailyCourses[index].courseName}}</text>
-            <text class="course-teacher">{{dailyCourses[index].teacher}}</text>
-            <text class="course-location">@{{dailyCourses[index].location}}</text>
-          </view>
-        </block>
-        <block wx:elif="{{dailyCourses[index] === 'occupied'}}">
-          <view class="occupied-slot"></view>
-        </block>
+    <view class="daily-schedule">
+      <view wx:for="{{sectionTimes}}" wx:key="index" class="schedule-item">
+        <view class="time-info">
+          <text class="section-number">{{index + 1}}</text>
+          <text class="time-text">{{item.start}}</text>
+          <text class="time-text">{{item.end}}</text>
+        </view>
+        <view class="course-container">
+          <block wx:if="{{dailyCourses[index] && dailyCourses[index].isStart}}">
+            <view class="course-card" style="{{tools.getCourseStyle(dailyCourses[index])}}"
+                  data-course="{{dailyCourses[index]}}" bindtap="onCourseClick">
+              <text class="course-name">{{dailyCourses[index].courseName}}</text>
+              <text class="course-teacher">{{dailyCourses[index].teacher}}</text>
+              <text class="course-location">@{{dailyCourses[index].location}}</text>
+            </view>
+          </block>
+          <block wx:elif="{{dailyCourses[index] === 'occupied'}}">
+            <view class="occupied-slot"></view>
+          </block>
+        </view>
       </view>
     </view>
   </view>
+
 
   <!-- 底部导航栏 -->
   <view class="flex-row mt-170">

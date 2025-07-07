@@ -3,10 +3,8 @@ var getCourseStyle = function(course) {
   
   var span = course.span || 1;
   var height = 'height: calc(' + (span * 100) + '% + ' + ((span - 1) * 2) + 'rpx);';
-  
-  // 使用课程设置的颜色
-  var bgColor = course.backgroundColor || '#EFEFEF';
-  var textColor = course.textColor || '#333333';
+  var bgColor = course.backgroundColor || '#D0021B';
+  var textColor = course.textColor || '#FFFFFF';
   
   return height + 'background-color: ' + bgColor + '; color: ' + textColor + ';';
 }

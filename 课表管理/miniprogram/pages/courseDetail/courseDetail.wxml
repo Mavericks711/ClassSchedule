@@ -1,58 +1,50 @@
-<!-- /pages/course_detail/course_detail.wxml -->
-
 <view class="page">
-  <!-- 加载状态 -->
-  <view wx:if="{{isLoading}}" class="loading-container">
-    <van-loading type="spinner" size="24px" vertical>加载中...</van-loading>
+  <!-- 顶部灰色区域 -->
+  <view class="header">
+    <navigator url="/pages/schedule_week/schedule_week" open-type="navigateBack">
+      <image class="back-icon" src="/icon/Return.png"></image>
+    </navigator>
+    <text class="title">课程详情</text>
   </view>
 
-  <!-- 错误状态 -->
-  <view wx:elif="{{error}}" class="error-container">
-    <van-empty description="{{error}}" />
+  <!-- 白色卡片区域 -->
+  <view class="card">
+    <!-- 编辑按钮 -->
+    <image 
+      class="edit-icon" 
+      src="/icon/Edit.png" 
+      bindtap="navigateToEdit"
+    ></image>
+
+    <!-- 课程信息 -->
+    <view class="info-item">
+      <image class="info-icon" src="/icon/ClassName.png"></image>
+      <text class="info-text">课程名称：{{courseInfo.courseName}}</text>
+    </view>
+
+    <view class="info-item">
+      <image class="info-icon" src="/icon/CourseType.png"></image>
+      <text class="info-text">课程类型：{{courseInfo.isElective ? '选修' : '必修'}}</text>
+    </view>
+
+    <view class="info-item">
+      <image class="info-icon" src="/icon/Week.png"></image>
+      <text class="info-text">上课周数：{{formatWeeks(courseInfo.weeks)}}</text>
+    </view>
+
+    <view class="info-item">
+      <image class="info-icon" src="/icon/Time.png"></image>
+      <text class="info-text">上课时间：第{{courseInfo.startSection}}-{{courseInfo.endSection}}节</text>
+    </view>
+
+    <view class="info-item">
+      <image class="info-icon" src="/icon/Teacher.png"></image>
+      <text class="info-text">授课老师：{{courseInfo.teacher}}</text>
+    </view>
+
+    <view class="info-item">
+      <image class="info-icon" src="/icon/Location.png"></image>
+      <text class="info-text">上课地点：{{courseInfo.location}}</text>
+    </view>
   </view>
-
-  <!-- 内容展示 -->
-  <block wx:else>
-    <!-- 顶部课程主信息卡片 -->
-    <view class="card header-card" style="background-color: {{courseDetail.courseInfo.boxColor || '#4a90e2'}};">
-      <view class="header-content" style="color: {{courseDetail.courseInfo.textColor || '#ffffff'}};">
-        <text class="course-name">{{courseDetail.courseInfo.courseName}}</text>
-        <view class="tag-container">
-          <van-tag wx:if="{{courseDetail.courseInfo.isOptional}}" round type="primary">选修</van-tag>
-          <van-tag wx:else round type="success">必修</van-tag>
-          <van-tag wx:if="{{courseDetail.courseInfo.credits}}" round type="warning" custom-class="credit-tag">{{courseDetail.courseInfo.credits}}学分</van-tag>
-        </view>
-      </view>
-    </view>
-    
-    <!-- 详细信息列表 -->
-    <view class="card detail-card">
-      <van-cell-group border="{{false}}">
-        <van-cell title="任课教师" value="{{courseDetail.teacher}}" icon="manager-o" />
-        <van-cell title="上课地点" value="{{courseDetail.location}}" icon="location-o" border="{{false}}" />
-      </van-cell-group>
-    </view>
-
-    <view class="card detail-card">
-      <van-cell-group border="{{false}}">
-        <van-cell title="上课周次" icon="calendar-o">
-          <!-- WXS 用于格式化周次数组 -->
-          <view>{{tools.formatWeeks(courseDetail.weeks)}}</view>
-        </van-cell>
-        <van-cell title="上课时间" icon="clock-o" border="{{false}}">
-          <view>周{{tools.formatDay(courseDetail.day)}} 第 {{courseDetail.startSection}}-{{courseDetail.endSection}} 节</view>
-        </van-cell>
-      </van-cell-group>
-    </view>
-    
-    <!-- 操作按钮 -->
-    <view class="action-container">
-      <van-button type="primary" block bind:click="onEdit" custom-class="action-btn">编辑此安排</van-button>
-      <van-button type="danger" block bind:click="onDelete" custom-class="action-btn">删除此安排</van-button>
-    </view>
-
-  </block>
 </view>
-
-<!-- 引入 WXS 文件，用于格式化数据 -->
-<wxs src="../../wxs/schedule.wxs" module="tools" />

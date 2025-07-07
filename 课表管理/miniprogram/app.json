@@ -8,8 +8,8 @@
     "pages/schedule_week/schedule_week",
     "pages/edit/edit",
     "pages/set_password/set_password",
-    "pages/set_security/set_security"
-  
+    "pages/set_security/set_security",
+    "pages/courseDetail/courseDetail"
   ],
   "tabBar": {
     "selectedColor": "#1e8aef",

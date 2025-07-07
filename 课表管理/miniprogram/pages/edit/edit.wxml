@@ -32,14 +32,14 @@
             class="image"
             src="/icon/TextColorSet.png"
           />
-          <text class="font text_4 ml-10" style="color: {{textColor || '#a6a6a6'}}">点此更改文字颜色</text>
+          <text class="font text_4 ml-10" style="color: {{textColor || '#a6a6a6'}}">点此设置文字颜色</text>
         </view>
         <view class="flex-row items-center mt-19" bindtap="showBlockColorPicker">
           <image
             class="image"
             src="/icon/ClassColorSet.png"
           />
-          <text class="font text_5 ml-11" style="color: {{blockTextColor || '#a6a6a6'}}">点此更改方块颜色</text>
+          <text class="font text_5 ml-11" style="color: {{blockTextColor || '#a6a6a6'}}">点此设置方块颜色</text>
         </view>
         <!-- 添加单选框部分 -->
         <view class="flex-row items-center mt-19">

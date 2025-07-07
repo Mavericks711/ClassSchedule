@@ -509,19 +509,23 @@
 
 .course-card {
   position: absolute; /* 关键：让课程卡片可以跨越多行 */
-  top: 0;
+  top: 2rpx;
   left: 2rpx; /* 留出一点边距 */
   right: 2rpx;
+  
   border-radius: 8rpx;
   padding: 8rpx;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: center; /* 垂直居中 */
+  align-items: center; /* 水平居中 */
   font-size: 22rpx;
   overflow: hidden;
   z-index: 10;
   box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
   transition: transform 0.2s ease;
+  text-align: center; /* 文字居中 */
 }
 
 .course-card:active {

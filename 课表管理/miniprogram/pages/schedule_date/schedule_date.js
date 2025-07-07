@@ -22,44 +22,55 @@ Page({
       { start: '20:05', end: '20:50' },
       { start: '21:00', end: '21:45' },
     ],
+    isPageReady: false
   },
 
-  onLoad: function() {
-    this.initDateAndWeek();
-    this.loadDailySchedule();
+  onLoad: function () {
+    this.initDateAndWeek(() => {
+      this.loadDailySchedule();
+    });
   },
 
-  onShow: function() {
-    this.initDateAndWeek();
-    this.loadDailySchedule();
-  },
-
-  // 初始化日期和周数
-  initDateAndWeek: function() {
+  onShow: function () {
     const app = getApp();
-    const dateStr = app.globalData.currentDate || '2025/04/09';
-    const weekText = app.globalData.currentWeekText || '第8周 周三';
+    this.setData({
+      displayDate: app.globalData.currentDate || '2025/04/11',
+      schoolWeekText: app.globalData.currentWeekText || '第8周 周五'
+    });
+  
+    this.initDateAndWeek(() => {
+      this.loadDailySchedule();
+    });
+  },
+
+  initDateAndWeek: function(callback) {
+    const app = getApp();
+    const dateStr = app.globalData.currentDate || '2025/02/17';
+    const weekText = app.globalData.currentWeekText || '第1周 周一';
     
-    // 解析日期
     const [year, month, day] = dateStr.split('/').map(Number);
     const date = new Date(year, month - 1, day);
     
-    // 计算周数和星期几
-    const startDate = new Date('2025-02-17'); // 第1周周一
+    const startDate = new Date('2025-02-17');
     const diffDays = Math.floor((date - startDate) / (1000 * 60 * 60 * 24));
     const week = Math.min(Math.floor(diffDays / 7) + 1, 16);
-    const dayOfWeek = date.getDay(); // 0是周日，1是周一...
-    
+    const dayOfWeek = date.getDay();
+  
     this.setData({
       displayDate: dateStr,
       schoolWeekText: weekText,
       selectedDate: dateStr,
       currentWeek: week,
-      currentDay: dayOfWeek === 0 ? 7 : dayOfWeek // 转换为1-7表示周一到周日
+      currentDay: dayOfWeek === 0 ? 7 : dayOfWeek,
+      isPageReady: false
+    }, () => {
+      // 等数据设置完成后执行回调
+      if (typeof callback === 'function') {
+        callback();
+      }
     });
   },
 
-  // 加载当天课程数据
   loadDailySchedule: function() {
     const userEmail = wx.getStorageSync('userInfo')?.email;
     if (!userEmail) {
@@ -76,26 +87,23 @@ Page({
         weekNumber: this.data.currentWeek
       }
     }).then(res => {
-      wx.hideLoading();
       const allCourses = res.result || [];
-      
-      // 筛选出当天的课程
       const dayCourses = allCourses
         .filter(course => course.day === this.data.currentDay)
         .sort((a, b) => a.startSection - b.startSection);
       
-      // 初始化日课表数据
       const dailyCourses = Array(11).fill(null);
       
-      // 填充课程数据
       dayCourses.forEach(course => {
         const span = course.endSection - course.startSection + 1;
         
-        // 只在开始节设置课程信息
+        // 只在开始节设置完整的课程信息
         dailyCourses[course.startSection - 1] = {
           ...course,
           span: span,
-          isStart: true // 标记这是课程开始节
+          isStart: true,
+          backgroundColor: course.backgroundColor || '#D0021B', // 默认红色
+          textColor: course.textColor || '#FFFFFF' // 默认白色文字
         };
         
         // 标记被占用的节数
@@ -106,7 +114,12 @@ Page({
         }
       });
       
-      this.setData({ dailyCourses });
+      this.setData({ 
+        dailyCourses,
+        isPageReady: true 
+      }, () => {
+        wx.hideLoading();
+      });
     }).catch(err => {
       wx.hideLoading();
       console.error('加载课程表失败', err);
@@ -114,7 +127,6 @@ Page({
     });
   },
 
-  // 点击课程卡片
   onCourseClick: function(e) {
     const course = e.currentTarget.dataset.course;
     if (course && course !== 'occupied') {

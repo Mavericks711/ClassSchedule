@@ -2,7 +2,7 @@
   margin-left: 58rpx;
 }
 .mt-170 {
-  margin-top: 335rpx;
+  margin-top: 70rpx;
 }
 .page {
   padding-top: 117.14rpx;
@@ -233,7 +233,7 @@
 .schedule-item {
   display: flex;
   margin-bottom: 10rpx;
-  height: 120rpx;
+  height: 100rpx;
 }
 
 /* 时间信息部分 */
@@ -260,7 +260,6 @@
 .course-container {
   flex: 1;
   position: relative;
-  border-bottom: 1rpx solid #eee;
 }
 
 /* 课程卡片样式 */
@@ -269,23 +268,24 @@
   top: 2rpx;
   left: 2rpx;
   right: 2rpx;
+  bottom: 2rpx;
   border-radius: 8rpx;
-  padding: 8rpx;
+  padding: 15rpx;
   display: flex;
   flex-direction: column;
-  font-size: 22rpx;
   box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
-  overflow: hidden;
+  justify-content: center;  /* 垂直居中 */
 }
 
 .course-name {
   font-weight: bold;
+  font-size: 32rpx;
 }
 
 .course-teacher,
 .course-location {
   margin-top: 4rpx;
-  font-size: 20rpx;
+  font-size: 30rpx;
   opacity: 0.9;
 }
 
@@ -297,4 +297,7 @@
   right: 0;
   bottom: 0;
   background-color: transparent;
+}
+.course-card:active {
+  transform: scale(0.98);
 }

@@ -114,43 +114,46 @@ loadScheduleData: function (week) {
  * 核心函数：将课程列表处理成适合WXML渲染的二维网格
  * @param {Array} list - 从云函数返回的课程对象数组
  */
-processDataForGrid: function (list) {
-  // 初始化一个 11节课 x 7天 的空二维数组
-  
+processDataForGrid: function(list) {
   const grid = Array.from({ length: 11 }, () => Array(7).fill(null));
 
-  // 健壮性检查，防止list为null或undefined时报错
   if (list && list.length > 0) {
-  
-      list.forEach(course => {
-          const dayIndex = course.day - 1;
-          const startIndex = course.startSection - 1;
-          const span = course.endSection - course.startSection + 1;
+    list.forEach(course => {
+      const dayIndex = course.day - 1;
+      const startIndex = course.startSection - 1;
+      const span = course.endSection - course.startSection + 1;
 
-          if (dayIndex >= 0 && dayIndex < 7 && startIndex >= 0 && startIndex < 11) {
-              // 将课程对象和计算出的span放入网格
-              grid[startIndex][dayIndex] = { ...course, span: span };
-              // 标记被占用的格子
-              for (let i = 1; i < span; i++) {
-                  if (startIndex + i < 11) {
-                      grid[startIndex + i][dayIndex] = 'occupied';
-                  }
-              }
+      if (dayIndex >= 0 && dayIndex < 7 && startIndex >= 0 && startIndex < 11) {
+        // 只在开始位置放置课程信息
+        grid[startIndex][dayIndex] = { 
+          ...course, 
+          span: span,
+          // 确保颜色信息存在
+          backgroundColor: course.backgroundColor || '#EFEFEF',
+          textColor: course.textColor || '#333333'
+        };
+        
+        // 标记被占用的格子
+        for (let i = 1; i < span; i++) {
+          if (startIndex + i < 11) {
+            grid[startIndex + i][dayIndex] = 'occupied';
           }
-      });
+        }
+      }
+    });
   }
-  console.log('处理后的网格数据 (gridData):', grid);
   return grid;
 },
 
 
 //
-onCourseClick: function (e) {
+onCourseClick: function(e) {
   const course = e.currentTarget.dataset.course;
-  // 使用 schedule_id 跳转，这是最稳妥的方式
-  wx.navigateTo({
-    url: `/pages/courseDetail/courseDetail?id=${course.schedule_id}`
-  });
+  if (course && course !== 'occupied') {
+    wx.navigateTo({
+      url: `/pages/courseDetail/courseDetail?id=${course._id}`
+    });
+  }
 },
 
 
