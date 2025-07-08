@@ -51,12 +51,7 @@
     {
       "name": "courseReminderTrigger10",
       "type": "timer",
-      "config": "0 36 19 * * * *"
-    },
-    {
-      "name": "courseReminderTrigger10",
-      "type": "timer",
-      "config": "0 * * * * * *"
+      "config": "0 * * * * * *"  
     },
     {
       "name": "courseReminderTrigger11",
