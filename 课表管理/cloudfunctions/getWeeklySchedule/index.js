@@ -47,7 +47,8 @@ exports.main = async (event, context) => {
         
         // 3. 从 courseInfoArray 中获取颜色，并修正字段名 + 使用 $ifNull 增加健壮性
         backgroundColor: { $ifNull: ['$courseInfoArray.backgroundColor', '#EFEFEF'] }, // 注意是 backgroundColor！
-        textColor: { $ifNull: ['$courseInfoArray.textColor', '#333333'] }
+        textColor: { $ifNull: ['$courseInfoArray.textColor', '#333333'] },
+        isElective: '$courseInfo.isElective' 
       })
 
       // ===== 清理掉不再需要的临时字段 =====

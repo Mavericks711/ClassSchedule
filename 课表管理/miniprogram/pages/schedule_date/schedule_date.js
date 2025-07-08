@@ -130,11 +130,13 @@ Page({
   onCourseClick: function(e) {
     const course = e.currentTarget.dataset.course;
     if (course && course !== 'occupied') {
+      // 将课程对象转换为JSON字符串传递
+      const courseStr = JSON.stringify(course);
       wx.navigateTo({
-        url: `/pages/courseDetail/courseDetail?id=${course._id}`
+        url: `/pages/courseDetail/courseDetail?course=${encodeURIComponent(courseStr)}`
       });
     }
-  },
+},
 
 
   // 显示选择框

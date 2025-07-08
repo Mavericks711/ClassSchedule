@@ -33,11 +33,12 @@ exports.main = async (event, context) => {
       .unwind('$courseInfo')
       .addFields({
         // 以下字段名请确保与你最终版本一致
-        courseName: '$courseInfoArray.courseName',
+        courseName: '$courseInfo.courseName',
         teacher: '$teacher',
         location: '$location',
         backgroundColor: { $ifNull: ['$courseInfoArray.backgroundColor', '#EFEFEF'] },
-        textColor: { $ifNull: ['$courseInfoArray.textColor', '#333333'] }
+        textColor: { $ifNull: ['$courseInfoArray.textColor', '#333333'] },
+        isElective: '$courseInfo.isElective' 
       })
       .project({
         courseInfo: 0,

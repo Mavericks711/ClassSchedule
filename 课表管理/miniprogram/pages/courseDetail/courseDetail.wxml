@@ -1,48 +1,62 @@
 <view class="page">
-  <!-- 顶部灰色区域 -->
-  <view class="header">
-    <navigator url="/pages/schedule_week/schedule_week" open-type="navigateBack">
-      <image class="back-icon" src="/icon/Return.png"></image>
-    </navigator>
-    <text class="title">课程详情</text>
-  </view>
-
   <!-- 白色卡片区域 -->
   <view class="card">
-    <!-- 编辑按钮 -->
-    <image 
-      class="edit-icon" 
-      src="/icon/Edit.png" 
-      bindtap="navigateToEdit"
-    ></image>
-
-    <!-- 课程信息 -->
-    <view class="info-item">
+    <!-- 返回按钮和标题区域 -->
+    <view class="header">
+      <navigator url="/pages/schedule_week/schedule_week" open-type="navigateBack" class="back-btn">
+        <image class="back-icon" src="/icon/Return.png"></image>
+      </navigator>
+      <text class="title">课程详情</text>
+    </view>
+    
+    <!-- 第一行：课程名称 -->
+    <view class="info-row">
       <image class="info-icon" src="/icon/ClassName.png"></image>
       <text class="info-text">课程名称：{{courseInfo.courseName}}</text>
     </view>
-
-    <view class="info-item">
+    
+    <!-- 第二行：文字颜色 -->
+    <view class="info-row">
+      <image class="info-icon" src="/icon/TextColorSet.png"></image>
+      <text class="info-text">文字颜色：</text>
+      <view class="color-preview" style="background-color: {{courseInfo.textColor || '#333333'}}"></view>
+      <text class="info-text">{{courseInfo.textColor || '#333333'}}</text>
+    </view>
+    
+    <!-- 第三行：方块颜色 -->
+    <view class="info-row">
+      <image class="info-icon" src="/icon/ClassColorSet.png"></image>
+      <text class="info-text">方块颜色：</text>
+      <view class="color-preview" style="background-color: {{courseInfo.backgroundColor || '#EFEFEF'}}"></view>
+      <text class="info-text">{{courseInfo.backgroundColor || '#EFEFEF'}}</text>
+    </view>
+    
+    <!-- 第四行：课程类型 -->
+    <view class="info-row">
       <image class="info-icon" src="/icon/CourseType.png"></image>
       <text class="info-text">课程类型：{{courseInfo.isElective ? '选修' : '必修'}}</text>
     </view>
-
-    <view class="info-item">
+    
+    <!-- 第五行：上课周数 -->
+    <view class="info-row">
       <image class="info-icon" src="/icon/Week.png"></image>
       <text class="info-text">上课周数：{{formatWeeks(courseInfo.weeks)}}</text>
     </view>
-
-    <view class="info-item">
+    
+    <!-- 第六行：上课时间 -->
+    <view class="info-row">
       <image class="info-icon" src="/icon/Time.png"></image>
-      <text class="info-text">上课时间：第{{courseInfo.startSection}}-{{courseInfo.endSection}}节</text>
+      <text class="info-text">上课时间：周{{formatDay(courseInfo.day)}} 第{{courseInfo.startSection}}-{{courseInfo.endSection}}节</text>
     </view>
-
-    <view class="info-item">
+    
+    <!-- 第七行：授课老师 -->
+    <view class="info-row">
       <image class="info-icon" src="/icon/Teacher.png"></image>
       <text class="info-text">授课老师：{{courseInfo.teacher}}</text>
     </view>
-
-    <view class="info-item">
+    
+    <!-- 第八行：上课地点 -->
+    <view class="info-row">
       <image class="info-icon" src="/icon/Location.png"></image>
       <text class="info-text">上课地点：{{courseInfo.location}}</text>
     </view>

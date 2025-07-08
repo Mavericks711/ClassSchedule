@@ -22,6 +22,13 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/courseDetail/courseDetail",
+          "pathName": "pages/courseDetail/courseDetail",
+          "query": "course=%257B%2522courseId%2522%253A%2522f4ec2f0f686bcb3e04c20a7a294c7427%2522%252C%2522weeks%2522%253A%255B1%252C2%252C3%252C4%252C5%252C6%252C7%252C8%252C9%252C10%252C11%252C12%252C13%252C14%252C15%252C16%255D%252C%2522day%2522%253A7%252C%2522startSection%2522%253A6%252C%2522endSection%2522%253A8%252C%2522teacher%2522%253A%2522%25E9%2599%2588%25E4%25BF%2590%25E7%2587%2595%2522%252C%2522location%2522%253A%2522%25E5%25AD%25A6%25E6%25AD%25A6%25E6%25A5%25BCA201%2522%252C%2522courseName%2522%253A%2522%25E5%258A%25A8%25E7%2594%25BB%25E8%25AE%25BE%25E8%25AE%25A1%2522%252C%2522backgroundColor%2522%253A%2522%2523B9006F%2522%252C%2522textColor%2522%253A%2522%2523a6a6a6%2522%252C%2522span%2522%253A3%257D",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "pages/set_security/set_security",
           "pathName": "pages/set_security/set_security",
           "query": "",
