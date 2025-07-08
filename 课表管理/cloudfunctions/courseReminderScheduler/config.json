@@ -9,6 +9,7 @@
       "config": "0 30 7 * * * *"
     },
     {
+      "name": "courseReminderTrigger2",
       "type": "timer",
       "config": "0 25 8 * * * *"
     },
