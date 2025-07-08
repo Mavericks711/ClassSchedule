@@ -86,10 +86,44 @@ Page({
   },
 
   // 切换邮件提醒状态
-  toggleEmailReminder(e) {
-    this.setData({ emailReminder: e.detail.value });
-    // 后续可添加保存设置到云端的逻辑
-  },
+toggleEmailReminder(e) {
+  const newStatus = e.detail.value;
+  this.setData({ emailReminder: newStatus });
+  
+  // 获取用户邮箱
+  const userInfo = wx.getStorageSync('userInfo');
+  if (!userInfo || !userInfo.email) {
+    wx.showToast({ title: '请先登录', icon: 'none' });
+    // 恢复开关状态
+    this.setData({ emailReminder: !newStatus });
+    return;
+  }
+  
+  wx.showLoading({ title: '保存设置...' });
+  
+  // 调用云函数更新设置
+  wx.cloud.callFunction({
+    name: 'updateEmailReminder',
+    data: {
+      email: userInfo.email,
+      emailReminder: newStatus
+    }
+  }).then(res => {
+    wx.hideLoading();
+    if (res.result.success) {
+      wx.showToast({ title: '设置已保存', icon: 'success' });
+    } else {
+      wx.showToast({ title: res.result.message || '保存失败', icon: 'none' });
+      // 保存失败时恢复开关状态
+      this.setData({ emailReminder: !newStatus });
+    }
+  }).catch(err => {
+    wx.hideLoading();
+    wx.showToast({ title: '网络错误，请重试', icon: 'none' });
+    // 发生错误时恢复开关状态
+    this.setData({ emailReminder: !newStatus });
+  });
+},
 
   // 切换弹窗提醒状态
   togglePopupReminder(e) {

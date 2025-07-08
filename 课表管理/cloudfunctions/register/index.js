@@ -52,7 +52,7 @@ exports.main = async (event, context) => {
         email: email,
         passwordHash: hash, // 存储哈希值
         salt: salt,         // 存储盐
-       
+        emailReminder:true,//邮件提醒状态
         username: '对对队', // 设置默认用户名
         createTime: new Date()
       }

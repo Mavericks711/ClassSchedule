@@ -1,0 +1,61 @@
+{
+  "permissions": {
+    "openapi": []
+  },
+  "triggers": [
+    {
+      "name": "courseReminderTrigger",
+      "type": "timer",
+      "config": "0 30 7 * * * *"
+    },
+    {
+      "type": "timer",
+      "config": "0 25 8 * * * *"
+    },
+    {
+      "name": "courseReminderTrigger3",
+      "type": "timer",
+      "config": "0 40 9 * * * *"
+    },
+    {
+      "name": "courseReminderTrigger4",
+      "type": "timer",
+      "config": "0 35 10 * * * *"
+    },
+    {
+      "name": "courseReminderTrigger5",
+      "type": "timer",
+      "config": "0 0 14 * * * *"
+    },
+    {
+      "name": "courseReminderTrigger6",
+      "type": "timer",
+      "config": "0 55 14 * * * *"
+    },
+    {
+      "name": "courseReminderTrigger7",
+      "type": "timer",
+      "config": "0 10 16 * * * *"
+    },
+    {
+      "name": "courseReminderTrigger8",
+      "type": "timer",
+      "config": "0 5 17 * * * *"
+    },
+    {
+      "name": "courseReminderTrigger9",
+      "type": "timer",
+      "config": "0 20 18 * * * *"
+    },
+    {
+      "name": "courseReminderTrigger10",
+      "type": "timer",
+      "config": "0 35 19 * * * *"
+    },
+    {
+      "name": "courseReminderTrigger11",
+      "type": "timer",
+      "config": "0 30 20 * * * *"
+    }
+  ]
+}
