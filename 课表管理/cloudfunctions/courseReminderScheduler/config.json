@@ -46,7 +46,7 @@
     {
       "name": "courseReminderTrigger9",
       "type": "timer",
-      "config": "0 20 18 * * * *"
+      "config": "0 40 18 * * * *"
     },
     {
       "name": "courseReminderTrigger10",
