@@ -19,8 +19,11 @@ function getCurrentWeek() {
 // 获取当前时间（小时）
 function getCurrentTime() {
   const now = new Date();
-  return now.getHours() + now.getMinutes() / 60;
+  // 转换为北京时间（UTC+8）
+  const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000); // 加8小时毫秒数
+  return beijingTime.getHours() + beijingTime.getMinutes() / 60;
 }
+
 
 // 获取当前星期几（1-7）
 function getCurrentDay() {
