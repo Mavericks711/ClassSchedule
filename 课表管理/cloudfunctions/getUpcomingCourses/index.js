@@ -33,21 +33,34 @@ exports.main = async (event, context) => {
     const currentWeek = getCurrentWeek();
     const currentDay = getCurrentDay();
     const currentTime = getCurrentTime();
+
+    console.log('当前周:', currentWeek);
+    console.log('当前星期:', currentDay);
+    console.log('当前时间(小时):', currentTime);
+    
+    // 计算半小时内的节次
+    const validSections = SECTION_START_TIME
+      .map((time, idx) => (idx > 0 && time >= currentTime && time <= currentTime + 0.5 ? idx : null))
+      .filter(section => section !== null);
+    
+    console.log('符合条件的节次:', validSections);
     
     // 查询半小时内开始的课程
     const upcomingCourses = await db.collection('courses_schedule')
       .where({
         weeks: currentWeek,
         day: currentDay,
-        startSection: _.in(
-          // 计算哪些节次的课程会在半小时内开始
-          SECTION_START_TIME.map((time, idx) => {
-            if (idx === 0) return null; // 跳过索引0
-            return (time >= currentTime && time <= currentTime + 0.5) ? idx : null;
-          }).filter(section => section !== null)
-        )
+        startSection: _.in(validSections)
       })
       .get();
+    
+    console.log('查询到的课程数量:', upcomingCourses.data.length);
+    
+    // 打印符合条件的课程
+    console.log('符合时间范围的课程:');
+    upcomingCourses.data.forEach(course => {
+      console.log(`- 课程ID: ${course.course_id}, 节次: ${course.startSection}, 地点: ${course.location}`);
+    });
     
     if (!upcomingCourses.data || upcomingCourses.data.length === 0) {
       return { success: true, data: [] };
@@ -60,6 +73,14 @@ exports.main = async (event, context) => {
         _id: _.in(courseIds)
       })
       .get();
+    
+    console.log('获取到的课程详情数量:', courseDetails.data.length);
+    
+    // 打印课程详情及关联用户
+    console.log('课程详情及关联用户:');
+    courseDetails.data.forEach(detail => {
+      console.log(`- 课程名称: ${detail.courseName}, 用户邮箱: ${detail.user_email}`);
+    });
     
     // 合并课程信息
     const courseMap = {};
@@ -74,9 +95,23 @@ exports.main = async (event, context) => {
         courseName: course.courseName || '未知课程',
         user_email: course.user_email || '',
         startSection: schedule.startSection,
-        location: schedule.location||'未知地点',
+        location: schedule.location || '未知地点',
         startTime: SECTION_START_TIME[schedule.startSection]
       };
+    });
+    
+    // 打印最终结果（课程与用户的映射）
+    console.log('最终符合条件的课程与用户映射:');
+    result.forEach(item => {
+      console.log(`- 课程: ${item.courseName}, 用户: ${item.user_email}, 节次: ${item.startSection}, 时间: ${item.startTime}h`);
+    });
+    
+    // 统计并打印涉及的用户
+    const uniqueUsers = [...new Set(result.map(item => item.user_email))];
+    console.log(`涉及的用户数量: ${uniqueUsers.length}`);
+    console.log('涉及的用户邮箱:');
+    uniqueUsers.forEach(email => {
+      console.log(`- ${email}`);
     });
     
     return { success: true, data: result };
