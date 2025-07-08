@@ -83,7 +83,7 @@ exports.main = async (event, context) => {
     }
     
     // 检查用户是否开启邮件提醒
-    const user = await db.collection('user')
+    const user = await db.collection('users')
       .where({ email: user_email })
       .field({ emailReminder: true })
       .get();

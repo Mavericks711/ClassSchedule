@@ -15,7 +15,7 @@ exports.main = async (event, context) => {
     }
 
     // 更新用户的邮件提醒状态
-    await db.collection('user')
+    await db.collection('users')
       .where({ 
         email: email,
         _openid: wxContext.OPENID // 确保只能修改自己的设置
