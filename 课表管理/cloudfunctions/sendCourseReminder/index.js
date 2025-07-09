@@ -97,7 +97,7 @@ exports.main = async (event, context) => {
     
     // 构建邮件内容
     const mailOptions = {
-      from: '1650387158@qq.com',
+      from: '课程提醒',
       to: user_email,
       subject: `[课程提醒] ${courseName} 即将开始`,
       html: `
