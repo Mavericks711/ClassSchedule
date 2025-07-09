@@ -39,7 +39,7 @@ function getCurrentTime() {
 }
 
 function getCurrentDay() {
-  console.warn("测试day");
+  console.warn("测试周");
   // const options = { timeZone: 'Asia/Shanghai', weekday: 'long' };
   // const weekdayMap = {
   //   'Monday': 1, 'Tuesday': 2, 'Wednesday': 3,
