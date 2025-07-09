@@ -161,9 +161,8 @@ Page({
     });
   },
 
-  // 合并获取用户设置和检查弹窗提醒的逻辑
- // 在 home.js 的 getUserSettingsAndCheckPopup 方法中
- getUserSettingsAndCheckPopup: function(email) {
+// 修改 getUserSettingsAndCheckPopup 方法
+getUserSettingsAndCheckPopup: function(email) {
   wx.cloud.callFunction({
     name: 'getUserPopupStatus',
     data: { email: email }
