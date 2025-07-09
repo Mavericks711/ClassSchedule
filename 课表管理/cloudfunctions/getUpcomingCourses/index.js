@@ -35,7 +35,7 @@ function getCurrentTime() {
   // return hours + minutes / 60;
 
 //测试时间
-  const testTime =20 + 36/60; // 19.6
+  const testTime =20 + 36/60; // 20.6
   console.warn(' 测试模式：使用模拟时间', testTime);
   return testTime;
 }
