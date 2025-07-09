@@ -47,7 +47,7 @@ exports.main = async (event, context) => {
     console.log('当前时间(小时):', currentTime);
     
     const validSections = SECTION_START_TIME
-      .map((time, idx) => idx > 0 && time >= currentTime && time <= currentTime + 1 ? idx : null)
+      .map((time, idx) => idx > 0 && time >= currentTime && time <= currentTime + 0.5 ? idx : null)
       .filter(section => section !== null);
     
     console.log('符合条件的节次:', validSections);
