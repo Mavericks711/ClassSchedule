@@ -30,10 +30,10 @@ exports.main = async (event, context) => {
     const popupUserMap = new Map(); // 存储用户对应的课程（去重）
     
     upcomingCourses.forEach(course => {
-      const { user_email, popUpReminder, emailReminder } = course;
+      const { email, popUpReminder, emailReminder } = course;
       
       // 2.1 处理邮件提醒（使用真实字段 emailReminder）
-      if (user_email && emailReminder) {
+      if (email && emailReminder) {
         emailTasks.push(cloud.callFunction({
           name: 'sendCourseReminder',
           data: course
@@ -41,10 +41,10 @@ exports.main = async (event, context) => {
       }
       
       // 2.2 处理弹窗提醒（使用真实字段 popUpReminder）
-      if (user_email && popUpReminder) {
+      if (email && popUpReminder) {
         // 每个用户只保留一个待弹窗课程（避免重复）
-        if (!popupUserMap.has(user_email)) {
-          popupUserMap.set(user_email, course);
+        if (!popupUserMap.has(email)) {
+          popupUserMap.set(email, course);
         }
       }
     });
