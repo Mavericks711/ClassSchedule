@@ -35,7 +35,7 @@ function getCurrentTime() {
   // const [hours, minutes] = timeStr.split(':').map(Number);
   // return hours + minutes / 60;
 
-  return 20.36;
+  return 20.80;
 }
 
 function getCurrentDay() {
