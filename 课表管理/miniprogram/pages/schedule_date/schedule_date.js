@@ -26,6 +26,13 @@ Page({
   },
 
   onLoad: function () {
+    const app = getApp();
+    // 确保全局数据已设置
+    if (!app.globalData.currentDate) {
+      app.globalData.currentDate = '2025/04/11';
+      app.globalData.currentWeekText = '第8周 周五';
+    }
+
     this.initDateAndWeek(() => {
       this.loadDailySchedule();
     });
@@ -33,6 +40,14 @@ Page({
 
   onShow: function () {
     const app = getApp();
+
+    // 确保全局数据已设置
+    if (!app.globalData.currentDate) {
+      app.globalData.currentDate = '2025/04/11';
+      app.globalData.currentWeekText = '第8周 周五';
+    }
+
+    
     this.setData({
       displayDate: app.globalData.currentDate || '2025/04/11',
       schoolWeekText: app.globalData.currentWeekText || '第8周 周五'
