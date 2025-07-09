@@ -34,7 +34,7 @@
         <text class="font text_5">弹窗</text>
         <switch 
           class="reminder-switch" 
-          checked="{{popupReminder}}" 
+          checked="{{popUpReminder}}" 
           bindchange="togglePopupReminder"
           color="#1e8aef" 
         />

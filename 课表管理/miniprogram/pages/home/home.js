@@ -17,12 +17,12 @@ Page({
     const userInfo = wx.getStorageSync('userInfo');
     if (userInfo && userInfo.email) {
       this.setData({
-        username: userInfo.username || '对对队', // 从缓存读取，若无则使用默认值
+        username: userInfo.username || '对对队',
         email: userInfo.email
       });
       
-      // 新增：检查并显示未读弹窗提醒
-      this.checkAndShowPopupReminder(userInfo.email);
+      // 关键修改：合并获取用户设置和检查弹窗提醒的逻辑
+      this.getUserSettingsAndCheckPopup(userInfo.email);
     } else {
       this.setData({
         username: '游客',
@@ -161,15 +161,20 @@ Page({
     });
   },
 
-  // 新增：检查并显示弹窗提醒的辅助函数
-  checkAndShowPopupReminder: function(email) {
+  // 合并获取用户设置和检查弹窗提醒的逻辑
+  getUserSettingsAndCheckPopup: function(email) {
     wx.cloud.callFunction({
-      name: 'getUserPopupStatus', // 后端云函数：查询未读提醒
+      name: 'getUserPopupStatus', // 复用现有的云函数
       data: { email: email }
     }).then(res => {
       if (res.result.success && res.result.data) {
-        const { popUpReminder, hasUnreadPopup, pendingPopupCourse } = res.result.data;
-        this.setData({ popUpReminder }); // 更新本地开关状态
+        const { popUpReminder, emailReminder, hasUnreadPopup, pendingPopupCourse } = res.result.data;
+        
+        // 更新本地开关状态（关键修复：从数据库同步弹窗提醒设置）
+        this.setData({
+          popUpReminder: popUpReminder !== undefined ? popUpReminder : true,
+          emailReminder: emailReminder !== undefined ? emailReminder : true // 如果数据库中没有emailReminder字段，默认true
+        });
 
         // 有未读提醒且开启弹窗时显示
         if (hasUnreadPopup && popUpReminder && pendingPopupCourse) {
@@ -180,13 +185,15 @@ Page({
             success: () => {
               // 清除未读标记
               wx.cloud.callFunction({
-                name: 'clearPopupUnread', // 后端云函数：清除标记
+                name: 'clearPopupUnread',
                 data: { email: email }
               });
             }
           });
         }
       }
+    }).catch(err => {
+      console.error('获取用户设置失败:', err);
     });
   },
 
