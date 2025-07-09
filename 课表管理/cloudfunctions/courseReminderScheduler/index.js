@@ -7,10 +7,21 @@ exports.main = async (event, context) => {
   try {
     // 1. 获取即将开始的课程（含用户提醒设置）
     const callResult = await cloud.callFunction({ name: 'getUpcomingCourses', data: {} });
-    const { success } = callResult;
-    const upcomingCourses = callResult.data.data;
     
-    if (!success || !upcomingCourses || upcomingCourses.length === 0) {
+    // 打印完整的调用结果，便于调试
+    console.log('getUpcomingCourses调用结果:', callResult);
+    
+    // 正确解析云函数返回结果
+    const { result } = callResult;
+    
+    if (!result || !result.success) {
+      console.error('获取课程失败:', result);
+      return { success: false, message: '获取课程信息失败' };
+    }
+    
+    const upcomingCourses = result.data || [];
+    
+    if (!Array.isArray(upcomingCourses) || upcomingCourses.length === 0) {
       return { success: true, message: '没有即将开始的课程' };
     }
     
