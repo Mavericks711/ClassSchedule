@@ -6,7 +6,7 @@ Page({
     email: '未登录',
     // --- 提醒设置 ---
     emailReminder: true,
-    popupReminder: true,
+    popUpReminder: true, // 修正为与数据库一致的字段名（首字母大写P和U）
   },
 
   /**
@@ -20,6 +20,9 @@ Page({
         username: userInfo.username || '对对队', // 从缓存读取，若无则使用默认值
         email: userInfo.email
       });
+      
+      // 新增：检查并显示未读弹窗提醒
+      this.checkAndShowPopupReminder(userInfo.email);
     } else {
       this.setData({
         username: '游客',
@@ -87,14 +90,104 @@ Page({
 
   // 切换邮件提醒状态
   toggleEmailReminder(e) {
-    this.setData({ emailReminder: e.detail.value });
-    // 后续可添加保存设置到云端的逻辑
+    const newStatus = e.detail.value;
+    this.setData({ emailReminder: newStatus });
+    
+    // 获取用户邮箱
+    const userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo || !userInfo.email) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      // 恢复开关状态
+      this.setData({ emailReminder: !newStatus });
+      return;
+    }
+    
+    wx.showLoading({ title: '保存设置...' });
+    
+    // 调用云函数更新设置
+    wx.cloud.callFunction({
+      name: 'updateEmailReminder',
+      data: {
+        email: userInfo.email,
+        emailReminder: newStatus
+      }
+    }).then(res => {
+      wx.hideLoading();
+      if (res.result.success) {
+        wx.showToast({ title: '设置已保存', icon: 'success' });
+      } else {
+        wx.showToast({ title: res.result.message || '保存失败', icon: 'none' });
+        // 保存失败时恢复开关状态
+        this.setData({ emailReminder: !newStatus });
+      }
+    }).catch(err => {
+      wx.hideLoading();
+      wx.showToast({ title: '网络错误，请重试', icon: 'none' });
+      // 发生错误时恢复开关状态
+      this.setData({ emailReminder: !newStatus });
+    });
   },
 
-  // 切换弹窗提醒状态
+  // 切换弹窗提醒状态（保存到users表的popUpReminder字段）
   togglePopupReminder(e) {
-    this.setData({ popupReminder: e.detail.value });
-    // 后续可添加保存设置到云端的逻辑
+    const newStatus = e.detail.value;
+    const userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo || !userInfo.email) {
+      wx.showToast({ title: '请先登录', icon: 'none' });
+      this.setData({ popUpReminder: !newStatus }); // 恢复状态
+      return;
+    }
+
+    wx.showLoading({ title: '保存设置...' });
+    wx.cloud.callFunction({
+      name: 'updatePopupReminder', // 需创建此云函数
+      data: {
+        email: userInfo.email,
+        popUpReminder: newStatus // 真实字段名
+      }
+    }).then(res => {
+      wx.hideLoading();
+      if (res.result.success) {
+        this.setData({ popUpReminder: newStatus });
+        wx.showToast({ title: '设置已保存', icon: 'success' });
+      } else {
+        wx.showToast({ title: '保存失败', icon: 'none' });
+        this.setData({ popUpReminder: !newStatus });
+      }
+    }).catch(err => {
+      wx.hideLoading();
+      wx.showToast({ title: '网络错误', icon: 'none' });
+      this.setData({ popUpReminder: !newStatus });
+    });
+  },
+
+  // 新增：检查并显示弹窗提醒的辅助函数
+  checkAndShowPopupReminder: function(email) {
+    wx.cloud.callFunction({
+      name: 'getUserPopupStatus', // 后端云函数：查询未读提醒
+      data: { email: email }
+    }).then(res => {
+      if (res.result.success && res.result.data) {
+        const { popUpReminder, hasUnreadPopup, pendingPopupCourse } = res.result.data;
+        this.setData({ popUpReminder }); // 更新本地开关状态
+
+        // 有未读提醒且开启弹窗时显示
+        if (hasUnreadPopup && popUpReminder && pendingPopupCourse) {
+          wx.showModal({
+            title: '课程即将开始',
+            content: `《${pendingPopupCourse.courseName}》将在30分钟内开始\n地点：${pendingPopupCourse.location || '未设置'}`,
+            confirmText: '知道了',
+            success: () => {
+              // 清除未读标记
+              wx.cloud.callFunction({
+                name: 'clearPopupUnread', // 后端云函数：清除标记
+                data: { email: email }
+              });
+            }
+          });
+        }
+      }
+    });
   },
 
   // 退出登录
@@ -120,5 +213,4 @@ Page({
       }
     });
   }
-  
 });
