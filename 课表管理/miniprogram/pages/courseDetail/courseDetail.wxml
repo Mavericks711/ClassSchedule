@@ -31,22 +31,14 @@
       <text class="info-text">{{courseInfo.backgroundColor || '#EFEFEF'}}</text>
     </view>
     
-    <!-- 第四行：课程类型 -->
-    <view class="info-row">
-      <image class="info-icon" src="/icon/CourseType.png"></image>
-      <text class="info-text">课程类型：{{courseInfo.isElective ? '选修' : '必修'}}</text>
-    </view>
     
-    <!-- 第五行：上课周数 -->
-    <view class="info-row">
-      <image class="info-icon" src="/icon/Week.png"></image>
-      <text class="info-text">上课周数：{{formatWeeks(courseInfo.weeks)}}</text>
-    </view>
+    
+    
     
     <!-- 第六行：上课时间 -->
     <view class="info-row">
       <image class="info-icon" src="/icon/Time.png"></image>
-      <text class="info-text">上课时间：周{{formatDay(courseInfo.day)}} 第{{courseInfo.startSection}}-{{courseInfo.endSection}}节</text>
+      <text class="info-text">上课时间：第{{courseInfo.startSection}}-{{courseInfo.endSection}}节</text>
     </view>
     
     <!-- 第七行：授课老师 -->
