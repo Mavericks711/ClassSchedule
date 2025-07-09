@@ -24,24 +24,32 @@ function getCurrentWeek() {
 }
 
 function getCurrentTime() {
-  const options = { 
-    timeZone: 'Asia/Shanghai',
-    hour: '2-digit', 
-    minute: '2-digit', 
-    hour12: false 
-  };
-  const timeStr = new Date().toLocaleString('en-US', options);
-  const [hours, minutes] = timeStr.split(':').map(Number);
-  return hours + minutes / 60;
+  // const options = { 
+  //   timeZone: 'Asia/Shanghai',
+  //   hour: '2-digit', 
+  //   minute: '2-digit', 
+  //   hour12: false 
+  // };
+  // const timeStr = new Date().toLocaleString('en-US', options);
+  // const [hours, minutes] = timeStr.split(':').map(Number);
+  // return hours + minutes / 60;
+
+//测试时间
+  const testTime = 19 + 36/60; // 19.6
+  console.warn(' 测试模式：使用模拟时间', testTime);
+  return testTime;
 }
 
 function getCurrentDay() {
-  const options = { timeZone: 'Asia/Shanghai', weekday: 'long' };
-  const weekdayMap = {
-    'Monday': 1, 'Tuesday': 2, 'Wednesday': 3,
-    'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 7
-  };
-  return weekdayMap[new Date().toLocaleString('en-US', options)];
+  // const options = { timeZone: 'Asia/Shanghai', weekday: 'long' };
+  // const weekdayMap = {
+  //   'Monday': 1, 'Tuesday': 2, 'Wednesday': 3,
+  //   'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 7
+  // };
+  // return weekdayMap[new Date().toLocaleString('en-US', options)];
+
+  //测试
+  return 3
 }
 
 exports.main = async (event, context) => {
@@ -118,14 +126,24 @@ exports.main = async (event, context) => {
     const userEmails = [...new Set(
       upcomingCourses.data.map(s => courseMap[s.courseId]?.email).filter(Boolean) // 修改为 email
     )];
+    
     const userSettings = {};
     if (userEmails.length > 0) {
+      // 修复：添加emailReminder字段查询
       const userRes = await db.collection('users')
         .where({ email: _.in(userEmails) })
-        .field({ email: true, popUpReminder: true }) // 使用真实字段名 email
+        .field({ 
+          email: true, 
+          popUpReminder: true,
+          emailReminder: true // 添加邮件提醒字段
+        })
         .get();
+      
       userRes.data.forEach(user => {
-        userSettings[user.email] = user.popUpReminder ?? true;
+        userSettings[user.email] = {
+          popUpReminder: user.popUpReminder ?? true,
+          emailReminder: user.emailReminder ?? true // 添加邮件提醒设置
+        };
       });
     }
     
@@ -133,16 +151,17 @@ exports.main = async (event, context) => {
     const result = upcomingCourses.data.map(schedule => {
       const courseId = schedule.courseId;
       const course = courseMap[courseId] || {};
-      const email = course.user_email || ''; 
+      const email = course.email || ''; 
       
       return {
         courseId,
         courseName: course.courseName || '未知课程',
-        email, // 修改为 email
+        email,
         startSection: schedule.startSection,
         location: schedule.location || '未知地点',
         startTime: SECTION_START_TIME[schedule.startSection],
-        popUpReminder: userSettings[email] ?? true // 使用 email 作为键
+        popUpReminder: userSettings[email]?.popUpReminder ?? true,
+        emailReminder: userSettings[email]?.emailReminder ?? true // 添加邮件提醒字段
       };
     });
     

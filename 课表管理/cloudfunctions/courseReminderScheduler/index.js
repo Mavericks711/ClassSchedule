@@ -58,17 +58,18 @@ exports.main = async (event, context) => {
     if (popupUsers.length > 0) {
       // 批量更新用户表：标记未读弹窗+存储课程信息
       for (const [email, course] of popupUsers) {
+        // 修复：使用db.command.set确保完整覆盖对象
         await db.collection('users')
           .where({ email: email })
           .update({
             data: {
-              hasUnreadPopup: true, // 新增临时字段：是否有未读弹窗
-              pendingPopupCourse: { // 新增临时字段：待弹窗课程信息
+              hasUnreadPopup: true,
+              pendingPopupCourse: db.command.set({
                 courseId: course.courseId,
                 courseName: course.courseName,
                 location: course.location,
                 startTime: course.startTime
-              }
+              })
             }
           });
       }
