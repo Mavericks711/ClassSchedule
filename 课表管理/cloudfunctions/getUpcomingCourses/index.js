@@ -1,38 +1,43 @@
-// cloudfunctions/getUpcomingCourses/index.js
+
+
 const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 const _ = db.command;
 
-// 节次与开始时间映射（小时）
 const SECTION_START_TIME = [
   0, 8.00, 8.55, 10.10, 11.05, 14.30, 15.25, 16.40, 17.35, 19.10, 20.05, 21.00
 ];
 
-// 获取当前周（需要根据学期开始日期计算，这里简化处理）
 function getCurrentWeek() {
-  // 实际应用中应根据学期开始日期计算当前周
-  // 假设当前是第8周
-  return 8;
+  return 8; // 固定第8周（实际应根据学期计算）
 }
 
-// 获取当前时间（小时）
 function getCurrentTime() {
-  const now = new Date();
-  // 转换为北京时间（UTC+8）
-  const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000); // 加8小时毫秒数
-  return beijingTime.getHours() + beijingTime.getMinutes() / 60;
+  const options = { 
+    timeZone: 'Asia/Shanghai',
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: false 
+  };
+  const timeStr = new Date().toLocaleString('en-US', options);
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  return hours + minutes / 60;
 }
 
-
-// 获取当前星期几（1-7）
 function getCurrentDay() {
-  const now = new Date();
-  return now.getDay() === 0 ? 7 : now.getDay(); // 转换为1-7
+  const options = { timeZone: 'Asia/Shanghai', weekday: 'long' };
+  const weekdayMap = {
+    'Monday': 1, 'Tuesday': 2, 'Wednesday': 3,
+    'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 7
+  };
+  return weekdayMap[new Date().toLocaleString('en-US', options)];
 }
 
 exports.main = async (event, context) => {
   try {
+    console.log('函数触发时间:', new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }));
+    
     const currentWeek = getCurrentWeek();
     const currentDay = getCurrentDay();
     const currentTime = getCurrentTime();
@@ -41,85 +46,101 @@ exports.main = async (event, context) => {
     console.log('当前星期:', currentDay);
     console.log('当前时间(小时):', currentTime);
     
-    // 计算半小时内的节次
     const validSections = SECTION_START_TIME
-      .map((time, idx) => (idx > 0 && time >= currentTime && time <= currentTime + 0.5 ? idx : null))
+      .map((time, idx) => idx > 0 && time >= currentTime && time <= currentTime + 0.5 ? idx : null)
       .filter(section => section !== null);
     
     console.log('符合条件的节次:', validSections);
     
-    // 查询半小时内开始的课程
+    // 查询课程安排（使用真实字段名）
     const upcomingCourses = await db.collection('courses_schedule')
-      .where({
-        weeks: currentWeek,
-        day: currentDay,
-        startSection: _.in(validSections)
+      .where({ 
+        weeks: currentWeek, 
+        day: currentDay, 
+        startSection: _.in(validSections) 
       })
       .get();
     
     console.log('查询到的课程数量:', upcomingCourses.data.length);
     
-    // 打印符合条件的课程
-    console.log('符合时间范围的课程:');
-    upcomingCourses.data.forEach(course => {
-      console.log(`- 课程ID: ${course.course_id}, 节次: ${course.startSection}, 地点: ${course.location}`);
-    });
+    if (!upcomingCourses.data || !Array.isArray(upcomingCourses.data)) {
+      console.error('课程数据格式错误:', upcomingCourses);
+      return { success: false, message: '数据格式异常' };
+    }
     
-    if (!upcomingCourses.data || upcomingCourses.data.length === 0) {
+    if (upcomingCourses.data.length === 0) {
+      console.log('没有即将开始的课程');
       return { success: true, data: [] };
     }
     
-    // 获取课程详情和用户邮箱
-    const courseIds = upcomingCourses.data.map(c => c.course_id);
-    const courseDetails = await db.collection('courses')
-      .where({
-        _id: _.in(courseIds)
+    // 提取课程ID（使用真实字段名 courseId）
+    const courseIds = upcomingCourses.data
+      .map(course => {
+        if (!course.courseId) {
+          console.warn(`无效课程记录: ${JSON.stringify(course)}`);
+          return null;
+        }
+        return course.courseId;
       })
+      .filter(id => id !== null);
+    
+    console.log('有效课程ID列表:', courseIds);
+    
+    if (courseIds.length === 0) {
+      console.error('没有有效的课程ID');
+      return { success: true, data: [] };
+    }
+    
+    // 查询课程详情
+    const courseDetails = await db.collection('courses')
+      .where({ _id: _.in(courseIds) })
       .get();
     
     console.log('获取到的课程详情数量:', courseDetails.data.length);
     
-    // 打印课程详情及关联用户
-    console.log('课程详情及关联用户:');
-    courseDetails.data.forEach(detail => {
-      console.log(`- 课程名称: ${detail.courseName}, 用户邮箱: ${detail.user_email}`);
-    });
-    
-    // 合并课程信息
+    // 构建ID到课程详情的映射
     const courseMap = {};
-    courseDetails.data.forEach(c => {
-      courseMap[c._id] = c;
+    courseDetails.data.forEach(course => {
+      courseMap[course._id] = course;
     });
     
+    // 批量查询用户的弹窗提醒设置（关键：使用真实字段名 popUpReminder）
+    const userEmails = [...new Set(
+      upcomingCourses.data.map(s => courseMap[s.courseId]?.user_email).filter(Boolean)
+    )];
+    const userSettings = {};
+    if (userEmails.length > 0) {
+      const userRes = await db.collection('users')
+        .where({ email: _.in(userEmails) })
+        .field({ email: true, popUpReminder: true }) // 真实字段名
+        .get();
+      userRes.data.forEach(user => {
+        userSettings[user.email] = user.popUpReminder ?? true;
+      });
+    }
+    
+    // 合并结果（包含用户的 popUpReminder 设置）
     const result = upcomingCourses.data.map(schedule => {
-      const course = courseMap[schedule.course_id] || {};
+      const courseId = schedule.courseId;
+      const course = courseMap[courseId] || {};
+      const userEmail = course.user_email || '';
+      
       return {
-        course_id: schedule.course_id,
+        courseId,
         courseName: course.courseName || '未知课程',
-        user_email: course.user_email || '',
+        user_email: userEmail,
         startSection: schedule.startSection,
         location: schedule.location || '未知地点',
-        startTime: SECTION_START_TIME[schedule.startSection]
+        startTime: SECTION_START_TIME[schedule.startSection],
+        popUpReminder: userSettings[userEmail] ?? true // 真实字段名
       };
     });
     
-    // 打印最终结果（课程与用户的映射）
-    console.log('最终符合条件的课程与用户映射:');
-    result.forEach(item => {
-      console.log(`- 课程: ${item.courseName}, 用户: ${item.user_email}, 节次: ${item.startSection}, 时间: ${item.startTime}h`);
-    });
-    
-    // 统计并打印涉及的用户
-    const uniqueUsers = [...new Set(result.map(item => item.user_email))];
-    console.log(`涉及的用户数量: ${uniqueUsers.length}`);
-    console.log('涉及的用户邮箱:');
-    uniqueUsers.forEach(email => {
-      console.log(`- ${email}`);
-    });
+    console.log('最终结果:', result);
     
     return { success: true, data: result };
   } catch (err) {
-    console.error('获取即将开始的课程失败:', err);
+    console.error('获取课程失败:', err);
     return { success: false, message: '服务器内部错误' };
   }
 };
