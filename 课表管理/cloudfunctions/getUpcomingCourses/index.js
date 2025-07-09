@@ -133,7 +133,7 @@ exports.main = async (event, context) => {
     const result = upcomingCourses.data.map(schedule => {
       const courseId = schedule.courseId;
       const course = courseMap[courseId] || {};
-      const email = course.email || ''; // 修改为 email
+      const email = course.user_email || ''; 
       
       return {
         courseId,
