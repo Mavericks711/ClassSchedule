@@ -17,12 +17,12 @@ Page({
     const userInfo = wx.getStorageSync('userInfo');
     if (userInfo && userInfo.email) {
       this.setData({
-        username: userInfo.username || '对对队', // 从缓存读取，若无则使用默认值
+        username: userInfo.username || '对对队',
         email: userInfo.email
       });
       
-      // 新增：检查并显示未读弹窗提醒
-      this.checkAndShowPopupReminder(userInfo.email);
+      // 关键修改：合并获取用户设置和检查弹窗提醒的逻辑
+      this.getUserSettingsAndCheckPopup(userInfo.email);
     } else {
       this.setData({
         username: '游客',
@@ -161,34 +161,45 @@ Page({
     });
   },
 
-  // 新增：检查并显示弹窗提醒的辅助函数
-  checkAndShowPopupReminder: function(email) {
-    wx.cloud.callFunction({
-      name: 'getUserPopupStatus', // 后端云函数：查询未读提醒
-      data: { email: email }
-    }).then(res => {
-      if (res.result.success && res.result.data) {
-        const { popUpReminder, hasUnreadPopup, pendingPopupCourse } = res.result.data;
-        this.setData({ popUpReminder }); // 更新本地开关状态
+  // 合并获取用户设置和检查弹窗提醒的逻辑
+ // 在 home.js 的 getUserSettingsAndCheckPopup 方法中
+ getUserSettingsAndCheckPopup: function(email) {
+  wx.cloud.callFunction({
+    name: 'getUserPopupStatus',
+    data: { email: email }
+  }).then(res => {
+    if (res.result && res.result.success && res.result.data) {
+      const { popUpReminder, emailReminder, hasUnreadPopup, pendingPopupCourse } = res.result.data;
+      
+      // 更新本地开关状态
+      this.setData({
+        popUpReminder: popUpReminder,
+        emailReminder: emailReminder
+      });
 
-        // 有未读提醒且开启弹窗时显示
-        if (hasUnreadPopup && popUpReminder && pendingPopupCourse) {
-          wx.showModal({
-            title: '课程即将开始',
-            content: `《${pendingPopupCourse.courseName}》将在30分钟内开始\n地点：${pendingPopupCourse.location || '未设置'}`,
-            confirmText: '知道了',
-            success: () => {
-              // 清除未读标记
-              wx.cloud.callFunction({
-                name: 'clearPopupUnread', // 后端云函数：清除标记
-                data: { email: email }
-              });
-            }
-          });
-        }
+      // 关键：添加空值检查
+      if (hasUnreadPopup && popUpReminder && pendingPopupCourse && pendingPopupCourse.courseName) {
+        wx.showModal({
+          title: '课程即将开始',
+          content: `《${pendingPopupCourse.courseName}》将在30分钟内开始\n地点：${pendingPopupCourse.location || '未设置'}`,
+          confirmText: '知道了',
+          showCancel: false,
+          success: () => {
+            // 清除未读标记
+            wx.cloud.callFunction({
+              name: 'clearPopupUnread',
+              data: { email: email }
+            });
+          }
+        });
       }
-    });
-  },
+    } else {
+      console.error('获取用户状态失败:', res.result);
+    }
+  }).catch(err => {
+    console.error('获取用户设置失败:', err);
+  });
+},
 
   // 退出登录
   logout: function() {

@@ -1,12 +1,22 @@
-
-
 const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 const _ = db.command;
 
+// 修正：用「小时 + 分钟/60」的正确小数表示时间
 const SECTION_START_TIME = [
-  0, 8.00, 8.55, 10.10, 11.05, 14.30, 15.25, 16.40, 17.35, 19.10, 20.05, 21.00
+  0, 
+  8.00,          // 节次1: 8:00
+  8 + 55/60,     // 节次2: 8:55
+  10 + 10/60,    // 节次3: 10:10
+  11 + 5/60,     // 节次4: 11:05
+  14 + 30/60,    // 节次5: 14:30
+  15 + 25/60,    // 节次6: 15:25
+  16 + 40/60,    // 节次7: 16:40
+  17 + 35/60,    // 节次8: 17:35
+  19 + 10/60,    // 节次9: 19:10
+  20 + 5/60,     // 节次10: 20:05
+  21.00          // 节次11: 21:00
 ];
 
 function getCurrentWeek() {
@@ -47,12 +57,12 @@ exports.main = async (event, context) => {
     console.log('当前时间(小时):', currentTime);
     
     const validSections = SECTION_START_TIME
-      .map((time, idx) => idx > 0 && time >= currentTime && time <= currentTime + 1 ? idx : null)
+      .map((time, idx) => idx > 0 && time >= currentTime && time <= currentTime + 0.5 ? idx : null)
       .filter(section => section !== null);
     
     console.log('符合条件的节次:', validSections);
     
-    // 查询课程安排（使用真实字段名）
+    // 查询课程安排
     const upcomingCourses = await db.collection('courses_schedule')
       .where({ 
         weeks: currentWeek, 
@@ -73,7 +83,7 @@ exports.main = async (event, context) => {
       return { success: true, data: [] };
     }
     
-    // 提取课程ID（使用真实字段名 courseId）
+    // 提取课程ID
     const courseIds = upcomingCourses.data
       .map(course => {
         if (!course.courseId) {
@@ -104,35 +114,45 @@ exports.main = async (event, context) => {
       courseMap[course._id] = course;
     });
     
-    // 批量查询用户的弹窗提醒设置（关键：使用真实字段名 popUpReminder）
+    // 批量查询用户的提醒设置
     const userEmails = [...new Set(
-      upcomingCourses.data.map(s => courseMap[s.courseId]?.user_email).filter(Boolean)
+      upcomingCourses.data.map(s => courseMap[s.courseId]?.email).filter(Boolean)
     )];
+    
     const userSettings = {};
     if (userEmails.length > 0) {
       const userRes = await db.collection('users')
         .where({ email: _.in(userEmails) })
-        .field({ email: true, popUpReminder: true }) // 真实字段名
+        .field({ 
+          email: true, 
+          popUpReminder: true,
+          emailReminder: true
+        })
         .get();
+      
       userRes.data.forEach(user => {
-        userSettings[user.email] = user.popUpReminder ?? true;
+        userSettings[user.email] = {
+          popUpReminder: user.popUpReminder ?? true,
+          emailReminder: user.emailReminder ?? true
+        };
       });
     }
     
-    // 合并结果（包含用户的 popUpReminder 设置）
+    // 合并结果
     const result = upcomingCourses.data.map(schedule => {
       const courseId = schedule.courseId;
       const course = courseMap[courseId] || {};
-      const userEmail = course.user_email || '';
+      const email = course.email || ''; 
       
       return {
         courseId,
         courseName: course.courseName || '未知课程',
-        user_email: userEmail,
+        email,
         startSection: schedule.startSection,
         location: schedule.location || '未知地点',
         startTime: SECTION_START_TIME[schedule.startSection],
-        popUpReminder: userSettings[userEmail] ?? true // 真实字段名
+        popUpReminder: userSettings[email]?.popUpReminder ?? true,
+        emailReminder: userSettings[email]?.emailReminder ?? true
       };
     });
     

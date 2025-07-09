@@ -8,7 +8,6 @@ exports.main = async (event, context) => {
     // 1. 获取即将开始的课程（含用户提醒设置）
     const callResult = await cloud.callFunction({ name: 'getUpcomingCourses', data: {} });
     
-    // 打印完整的调用结果，便于调试
     console.log('getUpcomingCourses调用结果:', callResult);
     
     // 正确解析云函数返回结果
@@ -32,7 +31,7 @@ exports.main = async (event, context) => {
     upcomingCourses.forEach(course => {
       const { email, popUpReminder, emailReminder } = course;
       
-      // 2.1 处理邮件提醒（使用真实字段 emailReminder）
+      // 2.1 处理邮件提醒
       if (email && emailReminder) {
         emailTasks.push(cloud.callFunction({
           name: 'sendCourseReminder',
@@ -40,7 +39,7 @@ exports.main = async (event, context) => {
         }));
       }
       
-      // 2.2 处理弹窗提醒（使用真实字段 popUpReminder）
+      // 2.2 处理弹窗提醒
       if (email && popUpReminder) {
         // 每个用户只保留一个待弹窗课程（避免重复）
         if (!popupUserMap.has(email)) {
@@ -53,24 +52,53 @@ exports.main = async (event, context) => {
     const emailResults = await Promise.allSettled(emailTasks);
     const emailSuccessCount = emailResults.filter(r => r.status === 'fulfilled').length;
     
-    // 4. 标记需要弹窗提醒的用户（在users表中添加临时字段）
+    // 4. 安全更新用户弹窗状态（核心修复）
     const popupUsers = Array.from(popupUserMap.entries());
     if (popupUsers.length > 0) {
-      // 批量更新用户表：标记未读弹窗+存储课程信息
       for (const [email, course] of popupUsers) {
-        await db.collection('users')
-          .where({ email: email })
-          .update({
-            data: {
-              hasUnreadPopup: true, // 新增临时字段：是否有未读弹窗
-              pendingPopupCourse: { // 新增临时字段：待弹窗课程信息
-                courseId: course.courseId,
-                courseName: course.courseName,
-                location: course.location,
-                startTime: course.startTime
+        try {
+          // 安全更新：确保pendingPopupCourse字段存在
+          await db.collection('users')
+            .where({ email })
+            .update({
+              data: {
+                hasUnreadPopup: true,
+                // 使用完整对象覆盖，避免嵌套问题
+                pendingPopupCourse: {
+                  courseId: course.courseId || '',
+                  courseName: course.courseName || '未知课程',
+                  location: course.location || '未知地点',
+                  startTime: course.startTime || 0
+                }
               }
-            }
-          });
+            });
+        } catch (updateErr) {
+          console.error(`更新用户 ${email} 失败:`, updateErr);
+          
+          // 修复性操作：先初始化字段
+          await db.collection('users')
+            .where({ email })
+            .update({
+              data: {
+                pendingPopupCourse: {}
+              }
+            });
+          
+          // 再次尝试更新
+          await db.collection('users')
+            .where({ email })
+            .update({
+              data: {
+                hasUnreadPopup: true,
+                pendingPopupCourse: {
+                  courseId: course.courseId || '',
+                  courseName: course.courseName || '未知课程',
+                  location: course.location || '未知地点',
+                  startTime: course.startTime || 0
+                }
+              }
+            });
+        }
       }
     }
     
