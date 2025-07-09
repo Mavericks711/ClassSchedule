@@ -24,24 +24,30 @@ function getCurrentWeek() {
 }
 
 function getCurrentTime() {
-  const options = { 
-    timeZone: 'Asia/Shanghai',
-    hour: '2-digit', 
-    minute: '2-digit', 
-    hour12: false 
-  };
-  const timeStr = new Date().toLocaleString('en-US', options);
-  const [hours, minutes] = timeStr.split(':').map(Number);
-  return hours + minutes / 60;
+  console.warn("测试时间");
+  // const options = { 
+  //   timeZone: 'Asia/Shanghai',
+  //   hour: '2-digit', 
+  //   minute: '2-digit', 
+  //   hour12: false 
+  // };
+  // const timeStr = new Date().toLocaleString('en-US', options);
+  // const [hours, minutes] = timeStr.split(':').map(Number);
+  // return hours + minutes / 60;
+
+  return 20.36;
 }
 
 function getCurrentDay() {
-  const options = { timeZone: 'Asia/Shanghai', weekday: 'long' };
-  const weekdayMap = {
-    'Monday': 1, 'Tuesday': 2, 'Wednesday': 3,
-    'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 7
-  };
-  return weekdayMap[new Date().toLocaleString('en-US', options)];
+  console.warn("测试day");
+  // const options = { timeZone: 'Asia/Shanghai', weekday: 'long' };
+  // const weekdayMap = {
+  //   'Monday': 1, 'Tuesday': 2, 'Wednesday': 3,
+  //   'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 7
+  // };
+  // return weekdayMap[new Date().toLocaleString('en-US', options)];
+
+  return 3;
 }
 
 exports.main = async (event, context) => {
