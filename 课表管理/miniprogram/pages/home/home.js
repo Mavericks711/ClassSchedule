@@ -162,40 +162,44 @@ Page({
   },
 
   // 合并获取用户设置和检查弹窗提醒的逻辑
-  getUserSettingsAndCheckPopup: function(email) {
-    wx.cloud.callFunction({
-      name: 'getUserPopupStatus', // 复用现有的云函数
-      data: { email: email }
-    }).then(res => {
-      if (res.result.success && res.result.data) {
-        const { popUpReminder, emailReminder, hasUnreadPopup, pendingPopupCourse } = res.result.data;
-        
-        // 更新本地开关状态（关键修复：从数据库同步弹窗提醒设置）
-        this.setData({
-          popUpReminder: popUpReminder !== undefined ? popUpReminder : true,
-          emailReminder: emailReminder !== undefined ? emailReminder : true // 如果数据库中没有emailReminder字段，默认true
-        });
+ // 在 home.js 的 getUserSettingsAndCheckPopup 方法中
+ getUserSettingsAndCheckPopup: function(email) {
+  wx.cloud.callFunction({
+    name: 'getUserPopupStatus',
+    data: { email: email }
+  }).then(res => {
+    if (res.result && res.result.success && res.result.data) {
+      const { popUpReminder, emailReminder, hasUnreadPopup, pendingPopupCourse } = res.result.data;
+      
+      // 更新本地开关状态
+      this.setData({
+        popUpReminder: popUpReminder,
+        emailReminder: emailReminder
+      });
 
-        // 有未读提醒且开启弹窗时显示
-        if (hasUnreadPopup && popUpReminder && pendingPopupCourse) {
-          wx.showModal({
-            title: '课程即将开始',
-            content: `《${pendingPopupCourse.courseName}》将在30分钟内开始\n地点：${pendingPopupCourse.location || '未设置'}`,
-            confirmText: '知道了',
-            success: () => {
-              // 清除未读标记
-              wx.cloud.callFunction({
-                name: 'clearPopupUnread',
-                data: { email: email }
-              });
-            }
-          });
-        }
+      // 关键：添加空值检查
+      if (hasUnreadPopup && popUpReminder && pendingPopupCourse && pendingPopupCourse.courseName) {
+        wx.showModal({
+          title: '课程即将开始',
+          content: `《${pendingPopupCourse.courseName}》将在30分钟内开始\n地点：${pendingPopupCourse.location || '未设置'}`,
+          confirmText: '知道了',
+          showCancel: false,
+          success: () => {
+            // 清除未读标记
+            wx.cloud.callFunction({
+              name: 'clearPopupUnread',
+              data: { email: email }
+            });
+          }
+        });
       }
-    }).catch(err => {
-      console.error('获取用户设置失败:', err);
-    });
-  },
+    } else {
+      console.error('获取用户状态失败:', res.result);
+    }
+  }).catch(err => {
+    console.error('获取用户设置失败:', err);
+  });
+},
 
   // 退出登录
   logout: function() {
