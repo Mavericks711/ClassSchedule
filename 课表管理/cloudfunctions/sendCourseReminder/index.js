@@ -113,7 +113,7 @@ exports.main = async (event, context) => {
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee;">
           <h3 style="color: #333;">${courseName} 课程提醒</h3>
-          <p>您的课程 <strong>${courseName}</strong> 将在半小时后开始。</p>
+          <p>您的课程 <strong>${courseName}</strong> 将在半小时以内开始。</p>
           <p><strong>时间：</strong>${startTime}</p>
           <p><strong>地点：</strong>${location}</p>
           <p style="color: #666; font-size: 14px;">如果您不需要此提醒，请在APP中关闭邮件提醒功能。</p>
