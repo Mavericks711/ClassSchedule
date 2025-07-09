@@ -69,9 +69,10 @@ exports.main = async (event, context) => {
     console.log('符合条件的节次:', validSections);
     
     // 查询课程安排
+    // 关键修复：使用 _.in([currentWeek]) 查询数组字段
     const upcomingCourses = await db.collection('courses_schedule')
       .where({ 
-        weeks: currentWeek, 
+        weeks: _.in([currentWeek]), // 修复数组查询
         day: currentDay, 
         startSection: _.in(validSections) 
       })
@@ -108,8 +109,14 @@ exports.main = async (event, context) => {
     }
     
     // 查询课程详情
+    // 关键修复：使用 user_email 字段
     const courseDetails = await db.collection('courses')
       .where({ _id: _.in(courseIds) })
+      .field({
+        _id: true,
+        courseName: true,
+        user_email: true  // 使用实际数据库字段名
+      })
       .get();
     
     console.log('获取到的课程详情数量:', courseDetails.data.length);
@@ -121,9 +128,15 @@ exports.main = async (event, context) => {
     });
     
     // 批量查询用户的提醒设置
+    // 关键修复：使用 user_email 字段
     const userEmails = [...new Set(
-      upcomingCourses.data.map(s => courseMap[s.courseId]?.email).filter(Boolean)
+      upcomingCourses.data.map(s => {
+        const course = courseMap[s.courseId];
+        return course ? course.user_email : null; // 使用实际字段名
+      }).filter(Boolean)
     )];
+    
+    console.log('关联的用户邮箱:', userEmails);
     
     const userSettings = {};
     if (userEmails.length > 0) {
@@ -145,15 +158,16 @@ exports.main = async (event, context) => {
     }
     
     // 合并结果
+    // 关键修复：使用 user_email 字段
     const result = upcomingCourses.data.map(schedule => {
       const courseId = schedule.courseId;
       const course = courseMap[courseId] || {};
-      const email = course.email || ''; 
+      const email = course.user_email || ''; // 使用实际字段名
       
       return {
         courseId,
         courseName: course.courseName || '未知课程',
-        email,
+        email, // 这里返回的是用户的真实邮箱
         startSection: schedule.startSection,
         location: schedule.location || '未知地点',
         startTime: SECTION_START_TIME[schedule.startSection],
