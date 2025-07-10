@@ -46,7 +46,8 @@ Page({
   // 输入框输入事件处理函数
   ClassInput(e) {
     const inputValue = e.detail.value;
-    const reg = /^[a-zA-Z0-9\u4e00-\u9fa5\+\#\-\_\*\(\)\（\）\，\。\、\；\：\“\”\《\》\？\！\￥\……\·]+$/; 
+    // const reg = /^[a-zA-Z0-9\u4e00-\u9fa5\+\#\-\_\*\(\)\（\）\，\。\、\；\：\“\”\《\》\？\！\￥\……\·]+$/; 
+    const reg = /^[a-zA-Z\u4e00-\u9fa5]+$/; 
     if (!reg.test(inputValue)) {
       wx.showToast({
         title: '请输入有效的课程名称（中文或英文）',
