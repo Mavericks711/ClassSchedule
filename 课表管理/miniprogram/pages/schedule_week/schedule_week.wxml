@@ -167,4 +167,16 @@
     </view>
   </view>
 
+  <!-- 在页面底部添加弹窗组件 -->
+  <view class="popup-mask" wx:if="{{popupVisible}}">
+    <view class="popup-container">
+        <view class="popup-title">课程提醒</view>
+        <view class="popup-content">
+            <text>《{{popupCourse.courseName}}》</text>
+            <text>将在30分钟内开始</text>
+            <text>地点：{{popupCourse.location || '未设置'}}</text>
+        </view>
+        <button class="popup-confirm" bindtap="confirmPopup">知道了</button>
+    </view>
+</view>
 </view> <!--  ✅ 最外层 page 的结束标签  -->

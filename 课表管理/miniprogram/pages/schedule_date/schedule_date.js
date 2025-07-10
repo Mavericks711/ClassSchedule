@@ -22,7 +22,10 @@ Page({
       { start: '20:05', end: '20:50' },
       { start: '21:00', end: '21:45' },
     ],
-    isPageReady: false
+    //弹窗
+    isPageReady: false,
+    popupVisible: false,
+    popupCourse: null
   },
 
   onLoad: function () {
@@ -36,6 +39,8 @@ Page({
     this.initDateAndWeek(() => {
       this.loadDailySchedule();
     });
+
+    
   },
 
   onShow: function () {
@@ -56,6 +61,8 @@ Page({
     this.initDateAndWeek(() => {
       this.loadDailySchedule();
     });
+      //弹窗
+    this.checkPopupReminder();
   },
 
   initDateAndWeek: function(callback) {
@@ -261,6 +268,47 @@ Page({
       url: '/pages/edit/edit'
     });
   },
+  checkPopupReminder: function() {
+    const userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo || !userInfo.email) return;
+
+    wx.cloud.callFunction({
+        name: 'getUserPopupStatus',
+        data: { email: userInfo.email }
+    }).then(res => {
+        if (res.result && res.result.success && res.result.data) {
+            const { popUpReminder, hasUnreadPopup, pendingPopupCourse } = res.result.data;
+            
+            if (hasUnreadPopup && popUpReminder && pendingPopupCourse && pendingPopupCourse.courseName) {
+                // 显示弹窗
+                this.setData({
+                    popupVisible: true,
+                    popupCourse: pendingPopupCourse
+                });
+            }
+        }
+    }).catch(err => {
+        console.error('获取弹窗状态失败:', err);
+    });
+},
+confirmPopup: function() {
+    const userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo || !userInfo.email) return;
+
+    // 隐藏弹窗
+    this.setData({
+        popupVisible: false,
+        popupCourse: null
+    });
+
+    // 标记为已读
+    wx.cloud.callFunction({
+        name: 'clearPopupUnread',
+        data: { email: userInfo.email }
+    }).catch(err => {
+        console.error('清除弹窗标记失败:', err);
+    });
+},
 
   // 点击选择框外部关闭选择框
   handleOutsideTap() {
@@ -272,6 +320,12 @@ Page({
       displayDate: app.globalData.currentDate || '2025/04/11',
       schoolWeekText: app.globalData.currentWeekText || '第8周 周五'
     });
+    
+    const now = Date.now();
+    if (now - this.data.lastCheckTime > 60000) { // 1分钟内只检查一次
+      this.checkPopupReminder();
+      this.setData({ lastCheckTime: now });
+    }
   }
   
   
